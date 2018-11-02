@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Autodesk Forge Tutorial</title>
+  <meta charset="utf-8" />
+  <!-- Common packages: jQuery, Bootstrap, jsTree -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<!-- Autodesk Forge Viewer files -->
+  <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/style.min.css?v=v6.0" type="text/css">
+  <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/viewer3D.min.js?v=v6.0"></script>
+  <!-- this project files -->
+  <link href="css/main.css" rel="stylesheet" />
+  <script src="js/socket.io-1.0.0.js"></script> 
+  <script src="js/ForgeTree.js"></script>
+  <script src="js/ForgeViewer.js"></script>
+</head>
+
+<body>
+  <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav left col-lg-11">
+        <li>
+          <a href="http://developer.autodesk.com" target="_blank">
+            <img alt="Autodesk Forge" src="//developer.static.autodesk.com/images/logo_forge-2-line.png" height="20">
+          </a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav right col-lg-1">
+        <div style="padding-top: 10px; text-align: right;">
+          <li>
+            <button class="btn btn-lg btn-default" id="autodeskSigninButton">Sign In &nbsp&nbsp
+              <img src="https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/autodesk_text.png"
+                height="20">
+            </button>
+            <button class="btn btn-sm btn-default" id="signOut">Sign Out &nbsp&nbsp<span id="userInfo"></span>
+            </button>
+          </li>
+        </div>
+      </ul>
+    </div>
+  </nav>
+  <!-- End of navbar -->
+  <div class="container-fluid fill">
+    <div class="row fill">
+      <div class="col-sm-1 fill"></div>
+      <div class="col-sm-5 fill">
+
+        <div class="row">
+          <div style="padding-top: 10px; text-align: center;">
+            <h2>Revit Family Creation Online</h2>
+          </div>
+        </div>
+
+        <div class="row ">
+            <div class="row">
+              <div class="row">
+                <div style="padding-top: 10px; text-align: center;">
+                  <h3>Window Family</h3>
+                  <div class="row">
+                    <div style="padding-top: 10px; text-align: center;">
+                      <div class="col-lg-4">
+                        <div class="thumbnail">
+                          <img src="/res/double-hung.png" class="img-rounded" width="150px" height="=150px" alt="Window Double Hung Family">
+                          <div class="caption">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <input type="radio" name='windowStyle' id='windowDoubleHung' checked>
+                              </span>
+                              <label class="form-control">Window Double Hung</label>
+                            </div><!-- /input-group -->
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="col-lg-4">
+                        <div class="thumbnail">
+                          <img src="/res/fixed.png" class="img-rounded" width="150px" height="=150px" alt="Window Fixed Family">
+                          <div class="caption">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <input type="radio" name='windowStyle' id='windowFixed'>
+                              </span>
+                              <label class="form-control">Window Fixed</label>
+                            </div><!-- /input-group -->
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-4">
+                        <div class="thumbnail">
+                          <img src="/res/sliding-double.png" class="img-rounded" width="150px" height="=150px" alt="Window Sliding Double">
+                          <div class="caption">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <input type="radio" name='windowStyle' id='windowFixed'>
+                              </span>
+                              <label class="form-control">Window Sliding Double</label>
+                            </div><!-- /input-group -->
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                    </div>
+                  </div><!-- /.row -->
+                  <div class="row" id="windowDoubleHungParams">
+                    <div class="col-lg-6">
+                      <h4>Dimensions</h4>
+                      <div style="padding-top: 10px; text-align: left;">
+
+                        <div class="input-group">
+                          <span class="input-group-addon">Type Name</span>
+                          <input id="typeNameId" type="text" class="form-control" placeholder="NewType">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                          <span class="input-group-addon">Height&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                          <input id="windowHeightId" type="number" class="form-control" placeholder="4" min="0">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                          <span class="input-group-addon">Width&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                          <input id="windowWidthId" type="number" class="form-control" placeholder="2" min="0">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                          <span class="input-group-addon">Inset&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                          <input id="windowInsetId" type="number" class="form-control" placeholder="0.05" min="0">
+                        </div>
+                        <br>
+                        <div class="input-group">
+                          <span class="input-group-addon">Sill Height</span>
+                          <input id="windowSillHeightId" type="number" class="form-control" placeholder="3" min="0">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6">
+
+                      <h4>Materials</h4>
+                      <div style="padding-top: 10px; text-align: center;">
+
+                        <div class="input-group">
+                          <div class="col-lg-7">
+                            <span class="input-group-addon">Glass Pane Material</span>
+                          </div>
+                          <div class="col-lg-5">
+                            <select id="glassPaneMaterialSelId" class="selectpicker" data-style="btn-group-lg" data-live-search="true">
+                              <option value="1">Default</option>
+                              <option value="2">Glass</option>
+                              <option value="3">Metal</option>
+                              <option value="4">Maple</option>
+                            </select>
+                          </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="input-group">
+                          <div class="col-lg-9">
+                            <span class="input-group-addon">Sash Material
+                            </span>
+
+
+                          </div>
+                          <div class="col-lg-3">
+                            <select id="sashMaterialSelId" class="selectpicker" data-style="btn-group-lg" data-live-search="true">
+                                <option value="1">Default</option>
+                                <option value="2">Glass</option>
+                                <option value="3">Metal</option>
+                                <option value="4">Maple</option>
+                              </select>
+                          </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="input-group">
+                          <span class="input-group-addon">Family Name</span>
+                          <input id="windowFamilyNameId" type="text" class="form-control" placeholder="Double Hung.rfa">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="btn-group btn-lg">
+
+                    <div style="padding-top: 10px;">
+
+                      <button class="btn btn-primary" id="createFamilyBtn">
+                        <span class="glyphicon glyphicon-play"></span>Create
+                      </button>
+                      <button class="btn btn-primary" id="cancelBtn">
+                        <span class="glyphicon glyphicon-stop"></span>Cancel
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div style="text-align: left;">
+                        <label id="statusText">
+                          <h4>Progress</h4>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div>
+                          <div class="progress progress-striped active">
+                              <div id='familyCreationProgressBar' class="progress-bar progress-bar-success" role="progressbar"
+                                   aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                                   style="width: 0%;">
+                                  <span class="sr-only">40% 完成</span>
+                              </div>
+                          </div>
+                      </div>
+                    </div>                
+                  </div>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="col-sm-1 fill">
+      </div>
+
+      <div class="col-sm-5 fill">
+        <br />
+        <div>
+          <label>
+            <h4>Output Folder</h4>
+          </label>
+        </div>
+        <div class="panel panel-default fill">
+          <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
+            <span id="refreshHubsRight" class="glyphicon glyphicon-refresh" style="cursor: pointer; display: none"
+              title="Refresh list of files"></span>
+          </div>
+
+          <div id="userHubsDestination">
+            <div style="padding-top: 100px; text-align: center;">
+              <br />
+              <br />
+              <br /> You may also need to provision your<br /> BIM 360 Docs account for this app.<br />
+              <a href="https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps">Learn more</a>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<iframe id="hiddenFrame" style="visibility: hidden; display: none" />
+</html>
