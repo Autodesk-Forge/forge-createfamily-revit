@@ -64,13 +64,11 @@ $(document).ready(function () {
 
 
   $('#createFamilyBtn').click(async function () {
-
-    destinatedNode  = $('#userHubsDestination').jstree(true).get_selected(true)[0];
-    if(destinatedNode == null || destinatedNode.type != 'folders'){
+    outputFolder  = $('#userHubsDestination').jstree(true).get_selected(true)[0];
+    if(outputFolder == null || outputFolder.type != 'folders'){
       alert('Can not get the destinate folder, please make sure you select a folder to save the Family file');
       return;
     }
-
     updateProgressBar('started');
 
     const typeName         = ($('#typeNameId').val()=="")? "New Type" : $('#typeNameId').val();
@@ -78,16 +76,9 @@ $(document).ready(function () {
     const windowWidth      = ($('#windowWidthId').val()=="")? 2 : $('#windowWidthId').val();
     const windowInset      = ($('#windowInsetId').val()=="")? 0.05: $('#windowInsetId').val();
     const windowSillHeight = ($('#windowSillHeightId').val()=="")? 3: $('#windowSillHeightId').val();
-
-
     const glassPaneMaterial = $('#glassPaneMaterialSelId option:selected').text()
     const sashMaterial      = $('#sashMaterialSelId option:selected').text()
-
-
     const windowFamilyName = ($('#windowFamilyNameId').val()=="")? "Double Hung.rfa": $('#windowFamilyNameId').val();
-
-
-
 
     const params = { 
       TypeName: typeName,
@@ -105,20 +96,17 @@ $(document).ready(function () {
     upgradeBtnElm.disabled = true;
 
     try {
-      let res = await createWindowFamily(WindowType.DOUBLEHUNG, params, destinatedNode.id);
+      let res = await createWindowFamily(WindowType.DOUBLEHUNG, params, outputFolder.id);
       workingItem = res.workItemId;
       updateProgressBar(res.workItemStatus);
     } catch (err) {
       updateProgressBar('failed');
-
     }
   });
   
   $('#cancelBtn').click(function () {
   
   });
-
-  
 });
 
 const WindowType = {
@@ -128,16 +116,28 @@ const WindowType = {
 };
 
 var workingItem = null;
+var outputFolder = null;
 //replace with your suitable topic names 
 const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 socketio = io();
 socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
   console.log(data);
-  updateProgressBar( data.Status.toLowerCase());
-  let upgradeBtnElm = document.getElementById('createFamilyBtn');
-  upgradeBtnElm.disabled = false;
-  workingItem = null;
+  const status = data.Status.toLowerCase();
+  updateProgressBar( status );
+
+  // enable the create button and refresh the hubs when completed/failed/cancelled
+  if(status == 'completed' || status == 'failed' || status == 'cancelled'){
+    let upgradeBtnElm = document.getElementById('createFamilyBtn');
+    upgradeBtnElm.disabled = false;
+    workingItem = null;
+  
+    if(outputFolder != null ){
+      let instance = $('#userHubsDestination').jstree(true);
+      instance.refresh_node(outputFolder);
+      outputFolder = null;
+    }
+  }
 })
 
 
@@ -265,11 +265,6 @@ function prepareUserHubsTree( ) {
     contextmenu: { items:  autodeskCustomMenuRight},
     "state": { "key": "autodeskHubs" }// key restore tree state
   }).bind("activate_node.jstree", function (evt, data) {
-    // if (data != null && data.node != null && data.node.type == 'versions') {
-    //   $("#forgeViewer").empty();
-    //   var urn = data.node.id;
-    //   launchViewer(urn);
-    // }
   });
 }
 
@@ -291,7 +286,6 @@ function autodeskCustomMenuRight(autodeskNode) {
         deleteFolder: {
           label: "Delete folder",
           action: async function () {
-            // var treeNode = $('#userHubs').jstree(true).get_selected(true)[0];
             try{
               await deleteFolder(autodeskNode);
               // refresh the parent node
