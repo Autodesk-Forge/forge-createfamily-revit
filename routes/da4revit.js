@@ -142,13 +142,13 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
         const oauth_token = await oauth_client.authenticate();
-        let workitemRes = await cancelWrokitem(workitemId, oauth_token.access_token);
+        await cancelWrokitem(workitemId, oauth_token.access_token);
         let workitemStatus = {
             'WorkitemId': workitemId,
             'Status': "Cancelled"
         };
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        res.status(200).end(JSON.stringify(workitemRes.body));
+        res.status(200).end(JSON.stringify(workitemStatus));
     } catch (err) {
         res.status(500).end("error");
     }

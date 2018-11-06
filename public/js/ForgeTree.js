@@ -104,7 +104,11 @@ $(document).ready(function () {
     }
   });
   
-  $('#cancelBtn').click(function () {
+  $('#cancelBtn').click( async function () {
+    if( workingItem != null){
+      let res = await cancelWorkitem(workingItem);
+      console.log(res);
+    }
   
   });
 });
