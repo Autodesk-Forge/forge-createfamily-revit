@@ -17,7 +17,7 @@
 This sample demostrated how to create a window family using Design Automation for Revit API.
 
 # Thumbnail
-![thumbnail][/public/res/screenshot.png]
+![thumbnail](/public/res/screenshot.png)
 
 # Live Demo
 [https://familycreationsample.herokuapp.com/](https://familycreationsample.herokuapp.com/)
