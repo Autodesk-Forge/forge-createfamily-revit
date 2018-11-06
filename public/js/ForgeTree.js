@@ -26,7 +26,7 @@ $(document).ready(function () {
       $('#autodeskSigninButton').hide();
       
       // add right panel
-      $('#refreshHubsRight').show();
+      $('#refreshHubsDestination').show();
 
       // prepare sign out
       $('#signOut').click(function () {
@@ -36,19 +36,20 @@ $(document).ready(function () {
         $('#hiddenFrame').attr('src', 'https://accounts.autodesk.com/Authentication/LogOut');
         // learn more about this signout iframe at
         // https://forge.autodesk.com/blog/log-out-forge
-
-        $('#signOut').hide();
-        $('#autodeskSigninButton').show();
       })
 
       // and refresh button
-      $('#refreshHubsRight').click(function () {
+      $('#refreshHubsDestination').click(function () {
         $('#userHubsDestination').jstree(true).refresh();
       });
 
       // finally:
       prepareUserHubsTree();
       showUser();
+    },
+    error: function(err){
+      $('#signOut').hide();
+      $('#autodeskSigninButton').show();
     }
   });
 
@@ -128,13 +129,10 @@ const WindowType = {
 
 var workingItem = null;
 //replace with your suitable topic names 
-const SOCKET_TOPIC_WORKITEM          = 'Workitem-Notification';
+const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
-//replace with your own website
-const baseurl = 'http://localhost:3000';
-
-socketio = io.connect(baseurl);
-socketio.on(SOCKET_TOPIC_WORKITEM, async (data)=>{
+socketio = io();
+socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
   console.log(data);
   updateProgressBar( data.Status.toLowerCase());
   let upgradeBtnElm = document.getElementById('createFamilyBtn');

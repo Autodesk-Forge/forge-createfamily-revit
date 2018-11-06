@@ -33,5 +33,8 @@ module.exports = {
 
         // Required scope for the client-side viewer
         public: ['viewables:read']
+    },
+    designAutomation:{
+        callback_Url: process.env.FORGE_WORK_ITEM_CALLBACK_URL,
     }
 };

@@ -17,6 +17,8 @@
 /////////////////////////////////////////////////////////////////////
 
 const express = require('express');
+const request = require("request");
+
 const {
     ProjectsApi, 
     ItemsApi,
@@ -30,13 +32,9 @@ const {
 } = require('forge-apis');
 
 const { OAuth } = require('./common/oauth');
+const { designAutomation }= require('../config');
 
-const request = require("request");
-
-// TBD: Change to your callback.
-const callbackUrl = 'http://0b30ebac.ngrok.io/api/forge/da4revit/callback';
-const hubBucketKey = 'wip.dm.prod';
-
+const AUTODESK_HUB_BUCKET_KEY = 'wip.dm.prod';
 const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 let router = express.Router();
@@ -53,15 +51,6 @@ router.use(async (req, res, next) => {
 
     req.oauth_client = oauth_client;
     req.oauth_token = credentials;
-
-
-    // TBD: Keep 2 legged token for Design Automation API usage, will remove this when got 3 Legged working
-    oauth_client = oauth.get2LeggedClient();;
-    oauth_token = await oauth_client.authenticate();
-
-    req.oauth_client_2Legged = oauth_client;
-    req.oauth_token_2Legged = oauth_token;
-
     next();
 });
 
@@ -95,12 +84,9 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
 
     try {
         ////////////////////////////////////////////////////////////////////////////////
-        // the storage of the window family template
-        // const inputUrl = 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowFamily.rft';
+        // the signed storage of the window family template
+        // const inputUrl = 'https://developer.api.autodesk.com/oss/v2/signedresources/7ec8d102-d991-40f3-abdd-5aeafe072020?region=US';
         const inputUrl = 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft';
-
-
-        
         
         ////////////////////////////////////////////////////////////////////////////////
         // create a new storage for the ouput item version
@@ -122,7 +108,10 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
         
         ////////////////////////////////////////////////////////////////////////////////
         // use 2 legged token for design automation
-        let familyCreatedRes = await createWindowFamily(inputUrl, params, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, req.oauth_token_2Legged);
+        const oauth = new OAuth(req.session);
+        const oauth_client = oauth.get2LeggedClient();;
+        const oauth_token = await oauth_client.authenticate();    
+        let familyCreatedRes = await createWindowFamily(inputUrl, params, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
         if (familyCreatedRes == null || familyCreatedRes.statusCode != 200) {
             console.log('failed to create the revit family file');
             res.status(500).end('failed to create the revit family file');
@@ -150,7 +139,10 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
 
     const workitemId = decodeURIComponent(req.body.workitemId);
     try {
-        let workitemRes = await cancelWrokitem(workitemId, req.oauth_token_2Legged.access_token);
+        const oauth = new OAuth(req.session);
+        const oauth_client = oauth.get2LeggedClient();;
+        const oauth_token = await oauth_client.authenticate();
+        let workitemRes = await cancelWrokitem(workitemId, oauth_token.access_token);
         let workitemStatus = {
             'WorkitemId': workitemId,
             'Status': "Cancelled"
@@ -165,7 +157,10 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
 router.post('/da4revit/workitem/query', async(req, res, next) => {
     const workitemId = decodeURIComponent(req.body.workitemId);
     try {
-        let workitemRes = await getWorkitemStatus(workitemId, req.oauth_token_2Legged.access_token);
+        const oauth = new OAuth(req.session);
+        const oauth_client = oauth.get2LeggedClient();;
+        const oauth_token = await oauth_client.authenticate();        
+        let workitemRes = await getWorkitemStatus(workitemId, oauth_token.access_token);
         res.status(200).end(JSON.stringify(workitemRes.body));
     } catch (err) {
         res.status(500).end("error");
@@ -181,7 +176,6 @@ router.post('/da4revit/callback', async (req, res, next) => {
     if (req.body.status == 'success') {
         workitemStatus.Status = 'Success';
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        // TBD, empty the list if length > 100 to save the memory.
         workitemList.forEach(async (workitem, index) => {
             if (workitem.workitemId == req.body.id) {
                 try {
@@ -199,19 +193,20 @@ router.post('/da4revit/callback', async (req, res, next) => {
                     }
                     if( version == null || version.statusCode != 201 ){ 
                         console.log('falied to create a new version of the file');
-                        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-                        return;
+                        workitemStatus.Status = 'Failed'
+                    }else{
+                        console.log('successfully created a new version of the file');
+                        workitemStatus.Status = 'Completed';
                     }
-                    workitemStatus.Status = 'Completed';
                     global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
 
-                    console.log('successfully created a new version of the file');
-                    return;
                 } catch (err) {
                     console.log(err);
                     workitemStatus.Status = 'Failed';
                     global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-                    return;
+                }
+                finally{
+                    workitemList.splice(index, 1);
                 }
             }
         });
@@ -408,7 +403,7 @@ var getNewCreatedStorageInfo = async function (projectId, folderId, fileName, oa
         console.log('storage id is not correct');
         return null;
     }
-    const storageUrl = "https://developer.api.autodesk.com/oss/v2/buckets/" + hubBucketKey + "/objects/" + strList[1];
+    const storageUrl = "https://developer.api.autodesk.com/oss/v2/buckets/" + AUTODESK_HUB_BUCKET_KEY + "/objects/" + strList[1];
     return {
         "StorageId": storage.body.data.id,
         "StorageUrl": storageUrl
@@ -444,7 +439,7 @@ var createWindowFamily = function (inputUrl, windowParams, outputUrl, projectId,
                     },
                     onComplete: {
                         verb: "post",
-                        url: callbackUrl
+                        url: designAutomation.callback_Url
                     }
                 }
         };    

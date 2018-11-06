@@ -17,28 +17,27 @@
   <link href="css/main.css" rel="stylesheet" />
   <script src="js/socket.io-1.0.0.js"></script> 
   <script src="js/ForgeTree.js"></script>
-  <script src="js/ForgeViewer.js"></script>
 </head>
 
 <body>
   <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-      <ul class="nav navbar-nav left col-lg-11">
+      <ul class="nav navbar-nav left col-lg-10">
         <li>
           <a href="http://developer.autodesk.com" target="_blank">
             <img alt="Autodesk Forge" src="//developer.static.autodesk.com/images/logo_forge-2-line.png" height="20">
           </a>
         </li>
       </ul>
-      <ul class="nav navbar-nav right col-lg-1">
+      <ul class="nav navbar-nav right col-lg-2">
         <div style="padding-top: 10px; text-align: right;">
           <li>
-            <button class="btn btn-lg btn-default" id="autodeskSigninButton">Sign In &nbsp&nbsp
+            <button class="btn btn-sm btn-default" id="autodeskSigninButton" hidden>Sign In &nbsp&nbsp
               <img src="https://github.com/Autodesk-Forge/bim360appstore-data.management-nodejs-transfer.storage/raw/master/www/img/autodesk_text.png"
                 height="20">
             </button>
-            <button class="btn btn-sm btn-default" id="signOut">Sign Out &nbsp&nbsp<span id="userInfo"></span>
+            <button class="btn btn-sm btn-default" id="signOut" hidden>Sign Out &nbsp&nbsp<span id="userInfo"></span>
             </button>
           </li>
         </div>
@@ -246,7 +245,7 @@
         </div>
         <div class="panel panel-default fill">
           <div class="panel-heading" data-toggle="tooltip" style="padding: 0px;">
-            <span id="refreshHubsRight" class="glyphicon glyphicon-refresh" style="cursor: pointer; display: none"
+            <span id="refreshHubsDestination" class="glyphicon glyphicon-refresh" style="cursor: pointer; display: none"
               title="Refresh list of files"></span>
           </div>
 
