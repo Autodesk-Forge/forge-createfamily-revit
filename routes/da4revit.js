@@ -84,11 +84,6 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
 
     try {
         ////////////////////////////////////////////////////////////////////////////////
-        // the signed storage of the window family template
-        // const inputUrl = 'https://developer.api.autodesk.com/oss/v2/signedresources/7ec8d102-d991-40f3-abdd-5aeafe072020?region=US';
-        const inputUrl = 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft';
-        
-        ////////////////////////////////////////////////////////////////////////////////
         // create a new storage for the ouput item version
         const storageInfo = await getNewCreatedStorageInfo(destinateProjectId, destinateFolderId, params.FileName, req.oauth_client, req.oauth_token);
         if (storageInfo == null) {
@@ -111,7 +106,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
         const oauth_token = await oauth_client.authenticate();    
-        let familyCreatedRes = await createWindowFamily(inputUrl, params, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
+        let familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
         if (familyCreatedRes == null || familyCreatedRes.statusCode != 200) {
             console.log('failed to create the revit family file');
             res.status(500).end('failed to create the revit family file');

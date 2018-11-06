@@ -121,7 +121,6 @@ const WindowType = {
 
 var workingItem = null;
 var outputFolder = null;
-//replace with your suitable topic names 
 const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 socketio = io();

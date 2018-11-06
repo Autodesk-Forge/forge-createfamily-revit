@@ -36,5 +36,8 @@ module.exports = {
     },
     designAutomation:{
         callback_Url: process.env.FORGE_WORK_ITEM_CALLBACK_URL,
+        // Window family template, please change to your template URL
+        revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft'
+
     }
 };
