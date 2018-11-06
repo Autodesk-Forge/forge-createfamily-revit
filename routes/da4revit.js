@@ -174,42 +174,87 @@ router.post('/da4revit/callback', async (req, res, next) => {
         'Status': "Success"
     };
     if (req.body.status == 'success') {
+        const workitem = workitemList.find( (item) => {
+            return item.workitemId == req.body.id;
+        } )
+
+        if( workitem == undefined ){
+            console.log('the workitem is not in the list')
+            return;
+        }
+        let index = workitemList.indexOf(workitem);
         workitemStatus.Status = 'Success';
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        workitemList.forEach(async (workitem, index) => {
-            if (workitem.workitemId == req.body.id) {
-                try {
-                    console.log("check the workitem");
-                    console.log(workitem);
-                    
-                    const type = workitem.createVersionData.data.type;
-                    let version = null;
-                    if(type == "versions"){
-                        const versions = new VersionsApi();
-                        version = await versions.postVersion(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
-                    }else{
-                        const items = new ItemsApi();
-                        version = await items.postItem(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
-                    }
-                    if( version == null || version.statusCode != 201 ){ 
-                        console.log('falied to create a new version of the file');
-                        workitemStatus.Status = 'Failed'
-                    }else{
-                        console.log('successfully created a new version of the file');
-                        workitemStatus.Status = 'Completed';
-                    }
-                    global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
 
-                } catch (err) {
-                    console.log(err);
-                    workitemStatus.Status = 'Failed';
-                    global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-                }
-                finally{
-                    workitemList.splice(index, 1);
-                }
+        console.log("check the workitem");
+        console.log(workitem);
+        
+        const type = workitem.createVersionData.data.type;
+        try {
+            let version = null;
+            if(type == "versions"){
+                const versions = new VersionsApi();
+                version = await versions.postVersion(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
+            }else{
+                const items = new ItemsApi();
+                version = await items.postItem(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
             }
-        });
+            if( version == null || version.statusCode != 201 ){ 
+                console.log('falied to create a new version of the file');
+                workitemStatus.Status = 'Failed'
+            }else{
+                console.log('successfully created a new version of the file');
+                workitemStatus.Status = 'Completed';
+            }
+            global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+
+        } catch (err) {
+            console.log(err);
+            workitemStatus.Status = 'Failed';
+            global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        }
+        finally{
+            workitemList.splice(index, 1);
+        }
+
+        
+
+
+
+        // workitemList.forEach(async (workitem, index) => {
+        //     if (workitem.workitemId == req.body.id) {
+        //         try {
+        //             console.log("check the workitem");
+        //             console.log(workitem);
+                    
+        //             const type = workitem.createVersionData.data.type;
+        //             let version = null;
+        //             if(type == "versions"){
+        //                 const versions = new VersionsApi();
+        //                 version = await versions.postVersion(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
+        //             }else{
+        //                 const items = new ItemsApi();
+        //                 version = await items.postItem(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
+        //             }
+        //             if( version == null || version.statusCode != 201 ){ 
+        //                 console.log('falied to create a new version of the file');
+        //                 workitemStatus.Status = 'Failed'
+        //             }else{
+        //                 console.log('successfully created a new version of the file');
+        //                 workitemStatus.Status = 'Completed';
+        //             }
+        //             global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+
+        //         } catch (err) {
+        //             console.log(err);
+        //             workitemStatus.Status = 'Failed';
+        //             global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        //         }
+        //         finally{
+        //             workitemList.splice(index, 1);
+        //         }
+        //     }
+        // });
     }else{
         // Report if not successful.
         workitemStatus.Status = 'Failed';
