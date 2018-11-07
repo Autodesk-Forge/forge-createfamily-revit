@@ -92,7 +92,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
             return;
         }
         const outputUrl = storageInfo.StorageUrl;
-        console.log('output url for DA4Revit: ' + outputUrl);
+        // console.log('output url for DA4Revit: ' + outputUrl);
 
         const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, 'items:autodesk.bim360:File', 'versions:autodesk.bim360:File')
         if (createFirstVersionBody == null) {
@@ -138,6 +138,18 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
         const oauth_client = oauth.get2LeggedClient();;
         const oauth_token = await oauth_client.authenticate();
         await cancelWrokitem(workitemId, oauth_token.access_token);
+
+        // Remove the item from list if it's cancelled
+        const workitem = workitemList.find( (item) => {
+            return item.workitemId == workitemId;
+        } )
+        if( workitem == undefined ){
+            console.log('the workitem is not in the list')
+            return;
+        }
+        let index = workitemList.indexOf(workitem);
+        workitemList.splice(index, 1);
+
         let workitemStatus = {
             'WorkitemId': workitemId,
             'Status': "Cancelled"

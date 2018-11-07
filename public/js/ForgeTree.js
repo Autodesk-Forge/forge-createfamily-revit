@@ -69,7 +69,7 @@ $(document).ready(function () {
       alert('Can not get the destinate folder, please make sure you select a folder to save the Family file');
       return;
     }
-    updateProgressBar('started');
+    updateStatus('started');
 
     const typeName         = ($('#typeNameId').val()=="")? "New Type" : $('#typeNameId').val();
     const windowHeight     = ($('#windowHeightId').val()=="")? 4: $('#windowHeightId').val();
@@ -91,16 +91,13 @@ $(document).ready(function () {
       FileName : windowFamilyName,    
     };
 
-    // Disable the upgrade button    
-    let upgradeBtnElm = document.getElementById('createFamilyBtn');
-    upgradeBtnElm.disabled = true;
 
     try {
       let res = await createWindowFamily(WindowType.DOUBLEHUNG, params, outputFolder.id);
       workingItem = res.workItemId;
-      updateProgressBar(res.workItemStatus);
+      updateStatus(res.workItemStatus);
     } catch (err) {
-      updateProgressBar('failed');
+      updateStatus('failed');
     }
   });
   
@@ -127,33 +124,36 @@ socketio = io();
 socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
   console.log(data);
   const status = data.Status.toLowerCase();
-  updateProgressBar( status );
-
+  updateStatus( status );
+  
   // enable the create button and refresh the hubs when completed/failed/cancelled
   if(status == 'completed' || status == 'failed' || status == 'cancelled'){
-    let upgradeBtnElm = document.getElementById('createFamilyBtn');
-    upgradeBtnElm.disabled = false;
     workingItem = null;
-  
-    if(outputFolder != null ){
-      let instance = $('#userHubsDestination').jstree(true);
-      instance.refresh_node(outputFolder);
-      outputFolder = null;
-    }
+  }
+  if(status == 'completed' && outputFolder != null){
+    let instance = $('#userHubsDestination').jstree(true);
+    instance.refresh_node(outputFolder);
+    outputFolder = null;
   }
 })
 
 
-function updateProgressBar( status){
+function updateStatus( status){
   let statusText = document.getElementById('statusText');
+  let upgradeBtnElm = document.getElementById('createFamilyBtn');
+  let cancelBtnElm = document.getElementById('cancelBtn');
   switch( status){
     case "started":
         setProgress(20);
         statusText.innerHTML = "<h4>Submiting the job...</h4>"
+        // Disable Create and Cancel button
+        upgradeBtnElm.disabled = true;
+        cancelBtnElm.disabled = true;
         break;
     case "pending":
         setProgress(40);
         statusText.innerHTML = "<h4>Processing by Design Automation Server...</h4>"
+        cancelBtnElm.disabled = false;
         break;
     case "success":
         setProgress(80);
@@ -162,14 +162,23 @@ function updateProgressBar( status){
     case "completed":
         setProgress(100);
         statusText.innerHTML = "<h4>Family is Created Successfully in BIM360!</h4>"
+        // Enable Create and Cancel button
+        upgradeBtnElm.disabled = false;
+        cancelBtnElm.disabled = false;
         break;
     case "failed":
         setProgress(0);
         statusText.innerHTML = "<h4>Failed to create the family:(</h4>"
+        // Enable Create and Cancel button
+        upgradeBtnElm.disabled = false;
+        cancelBtnElm.disabled = false;
         break;
     case "cancelled":
         setProgress(0);
         statusText.innerHTML = "<h4>The Job is cancelled!</h4>"
+        // Enable Create and Cancel button
+        upgradeBtnElm.disabled = false;
+        cancelBtnElm.disabled = false;
         break;
   }
 }
