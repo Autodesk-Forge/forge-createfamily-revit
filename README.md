@@ -9,6 +9,7 @@
 [![Data-Management](https://img.shields.io/badge/Data%20Management-v1-green.svg)](http://developer.autodesk.com/)
 [![OSS](https://img.shields.io/badge/OSS-v2-green.svg)](http://developer.autodesk.com/)
 [![Model-Derivative](https://img.shields.io/badge/Model%20Derivative-v2-green.svg)](http://developer.autodesk.com/)
+[![Design-Automation](https://img.shields.io/badge/Design%20Automation-v3-green.svg)](http://developer.autodesk.com/)
 
 ![Intermediate](https://img.shields.io/badge/Level-Basic-green.svg)
 
@@ -96,10 +97,10 @@ After installing Github desktop for Windows, on the Git Shell, if you see a ***e
     git config --global http.sslverify "false"
 
 ### Limitation
-Only Double Hung window is supported
+- Only Double Hung window is supported
+- Currently, the Window family template which is used to create the family is hardcoded, will improve this to let user specify the template later.
 
 ## License
-
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
 
 ## Written by
