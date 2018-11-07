@@ -69,7 +69,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
 
             // For Window Family Creation workItem
             WindowsDAParams countItParams;
-            if ( RuntimeValue.runOnCloud)
+            if ( RuntimeValue.RunOnCloud)
             {
                 countItParams = WindowsDAParams.Parse("WindowParams.json");
             }

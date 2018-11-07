@@ -173,7 +173,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
                         para.Validator.IsMetric = false;
                         break;
                 }
-                if (RuntimeValue.runOnCloud)
+                if (RuntimeValue.RunOnCloud)
                 {
                     para.PathName = "DoubleHung.rfa";
                 }

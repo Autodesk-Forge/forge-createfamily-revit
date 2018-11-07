@@ -28,10 +28,10 @@ using DesignAutomationFramework;
 
 namespace Autodesk.Forge.RevitIO.CreateWindow
 {
-    public struct RuntimeValue
+    internal class RuntimeValue
     {
         // Change this to true when publishing to Revit IO cloud
-        public static bool runOnCloud = false;
+        public static bool RunOnCloud { get; } = false;
     }
     public class CreateWindowData
     {
@@ -45,7 +45,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
     {
         public ExternalDBApplicationResult OnStartup(ControlledApplication application)
         {
-            if (RuntimeValue.runOnCloud)
+            if (RuntimeValue.RunOnCloud)
             {
                 DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
             }
