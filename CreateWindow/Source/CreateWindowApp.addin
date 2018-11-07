@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="DBApplication">
+    <Name>Create Window Family App</Name>
+    <Assembly>CreateWindowApp.dll</Assembly>
+    <ClientId>99E53A88-49F9-425D-B6A6-0316E199014D</ClientId>
+    <FullClassName>Autodesk.Forge.RevitIO.CreateWindow.CreateWindowApp</FullClassName>
+    <Description>"Create Window Family"</Description>
+    <VendorId>Forge</VendorId>
+    <VendorDescription>Autodesk</VendorDescription>
+  </AddIn>
+</RevitAddIns>
