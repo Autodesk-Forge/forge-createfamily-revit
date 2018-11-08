@@ -92,7 +92,6 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
             return;
         }
         const outputUrl = storageInfo.StorageUrl;
-        // console.log('output url for DA4Revit: ' + outputUrl);
 
         const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, 'items:autodesk.bim360:File', 'versions:autodesk.bim360:File')
         if (createFirstVersionBody == null) {
@@ -187,6 +186,7 @@ router.post('/da4revit/callback', async (req, res, next) => {
 
         if( workitem == undefined ){
             console.log('the workitem is not in the list')
+            res.status(401).end('the workitem is not in the list');
             return;
         }
         let index = workitemList.indexOf(workitem);
@@ -230,6 +230,7 @@ router.post('/da4revit/callback', async (req, res, next) => {
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         console.log(req.body);
     }
+    res.status(200).end('finshed handling the workitem callback');
     return;
 })
 
