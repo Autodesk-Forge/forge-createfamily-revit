@@ -37,7 +37,13 @@ module.exports = {
     designAutomation:{
         callback_Url: process.env.FORGE_WORK_ITEM_CALLBACK_URL,
         // Window family template, please change to your template URL
-        revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft'
+        revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft',
+        revit_IO_Endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
+        revit_IO_Nick_Name: 'revitiosample',
+        revit_IO_App_Name: 'CreateDoubleHungWindowFamilyApp+test',
+        revit_IO_Activity_Name: 'CreateDoubleHungWindowFamilyActivity+test',
+        bim360_Item_Type : 'items:autodesk.bim360:File',
+        bim360_Version_Type : 'versions:autodesk.bim360:File'
 
     }
 };

@@ -93,7 +93,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
         }
         const outputUrl = storageInfo.StorageUrl;
 
-        const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, 'items:autodesk.bim360:File', 'versions:autodesk.bim360:File')
+        const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, designAutomation.bim360_Item_Type, designAutomation.bim360_Version_Type);
         if (createFirstVersionBody == null) {
             console.log('failed to create body of Post Item');
             res.status(500).end('failed to create body of Post Item');
@@ -111,6 +111,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
             res.status(500).end('failed to create the revit family file');
             return;
         }
+        console.log('Submitted workitem:  '+ familyCreatedRes.body.id);
         const familyCreatedInfo = {
             "fileName": params.FileName,
             "workItemId": familyCreatedRes.body.id,
@@ -146,6 +147,7 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
             console.log('the workitem is not in the list')
             return;
         }
+        console.log('The workitem: ' + workitemId + ' is cancelled')
         let index = workitemList.indexOf(workitem);
         workitemList.splice(index, 1);
 
@@ -175,6 +177,10 @@ router.post('/da4revit/workitem/query', async(req, res, next) => {
 
 
 router.post('/da4revit/callback', async (req, res, next) => {
+    // Best practice is to tell immediately that you got the call
+    // so return the HTTP call and proceed with the business logic
+    res.status(202).end();
+
     let workitemStatus = {
         'WorkitemId': req.body.id,
         'Status': "Success"
@@ -185,17 +191,13 @@ router.post('/da4revit/callback', async (req, res, next) => {
         } )
 
         if( workitem == undefined ){
-            console.log('the workitem is not in the list')
-            res.status(401).end('the workitem is not in the list');
+            console.log('The workitem: ' + req.body.id+ ' to callback is not in the item list')
             return;
         }
         let index = workitemList.indexOf(workitem);
         workitemStatus.Status = 'Success';
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-
-        console.log("check the workitem");
-        console.log(workitem);
-        
+        console.log("Post handle the workitem:  " + workitem.workitemId);        
         const type = workitem.createVersionData.data.type;
         try {
             let version = null;
@@ -207,10 +209,10 @@ router.post('/da4revit/callback', async (req, res, next) => {
                 version = await items.postItem(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
             }
             if( version == null || version.statusCode != 201 ){ 
-                console.log('falied to create a new version of the file');
+                console.log('Falied to create a new version of the file');
                 workitemStatus.Status = 'Failed'
             }else{
-                console.log('successfully created a new version of the file');
+                console.log('Successfully created a new version of the file');
                 workitemStatus.Status = 'Completed';
             }
             global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
@@ -230,7 +232,6 @@ router.post('/da4revit/callback', async (req, res, next) => {
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         console.log(req.body);
     }
-    res.status(200).end('finshed handling the workitem callback');
     return;
 })
 
@@ -242,7 +243,7 @@ function getWorkitemStatus(workItemId, access_token) {
 
         var options = {
             method: 'GET',
-            url: 'https://developer.api.autodesk.com/da/us-east/v3/workitems/' + workItemId,
+            url: designAutomation.revit_IO_Endpoint +'workitems/' + workItemId,
             headers: {
                 Authorization: 'Bearer ' + access_token,
                 'Content-Type': 'application/json'
@@ -286,7 +287,7 @@ function cancelWrokitem(workItemId, access_token) {
 
         var options = {
             method: 'DELETE',
-            url: 'https://developer.api.autodesk.com/da/us-east/v3/workitems/' + workItemId,
+            url:  designAutomation.revit_IO_Endpoint + 'workitems/' + workItemId,
             headers: {
                 Authorization: 'Bearer ' + access_token,
                 'Content-Type': 'application/json'
@@ -324,7 +325,7 @@ function cancelWrokitem(workItemId, access_token) {
 
 
 
-var createBodyOfPostStorage = function (folderId, fileName) {
+function createBodyOfPostStorage(folderId, fileName) {
     // create a new storage for the ouput item version
     let createStorage = new CreateStorage();
     let storageRelationshipsTargetData = new StorageRelationshipsTargetData("folders", folderId);
@@ -345,7 +346,7 @@ var createBodyOfPostStorage = function (folderId, fileName) {
 }
 
 
-var createBodyOfPostItem = function( fileName, folderId, storageId, itemType, versionType){
+function createBodyOfPostItem( fileName, folderId, storageId, itemType, versionType){
     const body = 
     {
         "jsonapi":{
@@ -400,7 +401,7 @@ var createBodyOfPostItem = function( fileName, folderId, storageId, itemType, ve
     return body;
 }
 
-var getNewCreatedStorageInfo = async function (projectId, folderId, fileName, oauth_client, oauth_token) {
+async function getNewCreatedStorageInfo(projectId, folderId, fileName, oauth_client, oauth_token) {
 
     // create body for Post Storage request
     let createStorageBody = createBodyOfPostStorage(folderId, fileName);
@@ -427,13 +428,13 @@ var getNewCreatedStorageInfo = async function (projectId, folderId, fileName, oa
 
 
 
-var createWindowFamily = function (inputUrl, windowParams, outputUrl, projectId, createVersionData, access_token_3Legged, access_token_2Legged) {
+function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, createVersionData, access_token_3Legged, access_token_2Legged) {
 
     return new Promise(function (resolve, reject) {
 
         const workitemBody = {
 
-                activityId: 'revitiosample.CreateDoubleHungWindowFamilyActivity+test',
+                activityId: designAutomation.revit_IO_Nick_Name + '.'+designAutomation.revit_IO_Activity_Name,
                 arguments: {
                     templateFile: {
                         url: inputUrl,
@@ -460,7 +461,7 @@ var createWindowFamily = function (inputUrl, windowParams, outputUrl, projectId,
         };    
         var options = {
             method: 'POST',
-            url: 'https://developer.api.autodesk.com/da/us-east/v3/workitems',
+            url: designAutomation.revit_IO_Endpoint+'workitems',
             headers: {
                 Authorization: 'Bearer ' + access_token_2Legged.access_token,
                 'Content-Type': 'application/json'
@@ -479,11 +480,8 @@ var createWindowFamily = function (inputUrl, windowParams, outputUrl, projectId,
                 } catch (e) {
                     resp = body
                 }
-                const workitemId = resp.id;
-                console.log(workitemId);
-
                 workitemList.push({
-                    workitemId: workitemId,
+                    workitemId: resp.id,
                     projectId: projectId,
                     createVersionData: createVersionData,
                     access_token_3Legged: access_token_3Legged
@@ -506,11 +504,5 @@ var createWindowFamily = function (inputUrl, windowParams, outputUrl, projectId,
         });
     })
 }
-
-
-
-
-
-
 
 module.exports = router;
