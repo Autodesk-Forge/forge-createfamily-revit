@@ -68,16 +68,16 @@ router.get('/datamanagement', async (req, res) => {
 });
 
 // delete a folder
-router.post('/datamanagement/folder/delete', async (req, res )=>{
-    const href = decodeURIComponent(req.body.id);
+router.delete('/datamanagement/folders', async (req, res )=>{
+    const href = req.body.id;
     if (href === '' || href == null) {
-        res.status(500).end();
+        res.status(400).end('input id is null');
         return;
     }
 
     const params = href.split('/');
     if(params.length < 3 ){
-        res.status(500).end('info: the ');
+        res.status(400).end('input id is not correct');
         return;
     }
     const projectId = params[params.length-3];
@@ -101,38 +101,38 @@ router.post('/datamanagement/folder/delete', async (req, res )=>{
     request(options, function (error, response, body) {
       if (error) {
         console.log(error);
-        res.status(500).end('failed to delete the file');
+        res.status(500).end('failed to delete the folder');
         return;
       }else{
         // console.log(body);
-        res.status(200).end('file is deleted');
+        res.status(200).end(body);
       }
     });
 })
 
 // create a subfolder
-router.post('/datamanagement/folder', async (req, res) =>{
-    const href = decodeURIComponent(req.body.id);
-    const folderName = decodeURIComponent(req.body.name);
+router.post('/datamanagement/folders', async (req, res) =>{
+    const href = req.body.id;
+    const folderName = req.body.name;
     if (href === '' || folderName == '') {
         res.status(500).end();
         return;
     }
 
     if (href === '#') {
-        res.status(500).end('not supported item');
+        res.status(400).end('Not supported item');
         return;
     } 
 
     const params = href.split('/');
     if( params.length < 3){
-        res.status(500).end('selected item id has problem');
+        res.status(400).end('selected item id has problem');
         return;
     }
 
     const resourceName = params[params.length - 2];
     if (resourceName != 'folders') {
-        res.status(500).end('not supported item');
+        res.status(400).end('not supported item');
         return;
     }
 
@@ -170,9 +170,7 @@ router.post('/datamanagement/folder', async (req, res) =>{
         }
       }
 
-
       try{
-
         let newFolder = await folders.postFolder( projectId, folderBody, oauth.getClient(), internalToken );
         console.log(newFolder);
         if(newFolder == null || newFolder.statusCode != 201){
@@ -184,7 +182,7 @@ router.post('/datamanagement/folder', async (req, res) =>{
             id: newFolder.body.links.self.href,
             type: newFolder.body.data.type
         }
-        res.status(200).end(JSON.stringify(folderInfo));
+        res.status(201).end(JSON.stringify(folderInfo));
       }catch(err){
         console.log('failed to create a folder.');
         res.status(500).end('failed to create a folder.');

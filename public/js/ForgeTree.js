@@ -80,34 +80,61 @@ $(document).ready(function () {
     const sashMaterial      = $('#sashMaterialSelId option:selected').text()
     const windowFamilyName = ($('#windowFamilyNameId').val()=="")? "Double Hung.rfa": $('#windowFamilyNameId').val();
 
+    // TBD: support different type of family, and multiple types in one family
     const params = { 
-      TypeName: typeName,
-      WindowHeight : windowHeight,
-      WindowWidth : windowWidth,
-      WindowInset : windowInset,
-      WindowSillHeight : windowSillHeight,
-      GlassPaneMaterial : glassPaneMaterial,
-      SashMaterial : sashMaterial,
+      FamilyType : FamileyType.WINDOW,
       FileName : windowFamilyName,    
+
+      WindowParams : [{
+        TypeName: typeName,
+        WindowType: WindowType.DOUBLEHUNG,
+        WindowHeight : windowHeight,
+        WindowWidth : windowWidth,
+        WindowInset : windowInset,
+        WindowSillHeight : windowSillHeight,
+        GlassPaneMaterial : glassPaneMaterial,
+        SashMaterial : sashMaterial,
+      }]
     };
 
-
     try {
-      let res = await createWindowFamily(WindowType.DOUBLEHUNG, params, outputFolder.id);
+      let res = await createFamily( params, outputFolder.id);
+      console.log('The family is created');
+      console.log(res);
       workingItem = res.workItemId;
       updateStatus(res.workItemStatus);
     } catch (err) {
+      console.log('Failed to create the family');
       updateStatus('failed');
     }
   });
   
   $('#cancelBtn').click( async function () {
     if( workingItem != null){
-      let res = await cancelWorkitem(workingItem);
-      console.log(res);
+      try{
+        const res = await cancelWorkitem(workingItem);
+        console.log('The job is cancelled');
+        console.log(res);
+      }catch(err){
+        console.log('Failed to cancel the job');
+      }
     }
-  
   });
+
+
+  $('#queryFamilyBtn').click( async function () {
+    if( workingItem != null){
+      try{
+        let res = await getWorkitemStatus(workingItem);
+        console.log('The status of job is gotton');
+        console.log(res);
+      }catch(err){
+        console.log('Failed to get the status of job');
+      }
+    }
+  });
+
+
 });
 
 const WindowType = {
@@ -115,6 +142,13 @@ const WindowType = {
   FIXED : 2,
   SLIDINGDOUBLE : 3
 };
+
+
+const FamileyType = {
+  WINDOW : 1,
+  DOOR   :2,
+}
+
 
 var workingItem = null;
 var outputFolder = null;
@@ -196,13 +230,8 @@ function setProgress( percent ){
 }
 
 /// Create Window Family
-async function createWindowFamily( windowType, params , targetFolder){
+async function createFamily( params , targetFolder){
   let def = $.Deferred();
-
-  if (windowType != WindowType.DOUBLEHUNG) {
-    def.reject('not supported window type.');
-    return def.promise();
-  }
 
   const data = {
     Params : params,
@@ -210,11 +239,12 @@ async function createWindowFamily( windowType, params , targetFolder){
   }
 
   jQuery.post({
-    url: '/api/forge/da4revit/family/window',
-    contentType: 'application/json',
+    url: '/api/forge/da4revit/v1/family/job',
+    contentType: 'application/json', // The data type was sent
+    dataType: 'json', // The data type will be revi
     data: JSON.stringify(data),
     success: function (res) {
-      def.resolve(JSON.parse(res));
+      def.resolve(res);
     },
     error: function (err) {
       def.reject(err);
@@ -299,7 +329,9 @@ function autodeskCustomMenuRight(autodeskNode) {
           label: "Delete folder",
           action: async function () {
             try{
-              await deleteFolder(autodeskNode);
+              const res = await deleteFolder(autodeskNode);
+              console.log('Folder is deleted.');
+              console.log(res);
               // refresh the parent node
               let instance = $('#userHubsDestination').jstree(true);
               selectNode = instance.get_selected(true)[0];
@@ -328,13 +360,14 @@ function deleteFolder(node){
     def.reject('selected node is not correct.');
   }
 
-  jQuery.post({
-    url: '/api/forge/datamanagement/folder/delete',
-    contentType: 'application/json',
+  $.ajax({
+    url: '/api/forge/datamanagement/folders',
+    type: "delete",
+    contentType: "application/json",
+    dataType: "json",
     data: JSON.stringify({ 'id': node.id}),
     success: function (res) {
-      console.log('folder is deleted.')
-      def.resolve('folder is deleted');
+      def.resolve(res);
     },
     error: function(err){
       def.reject(err);
@@ -356,7 +389,9 @@ async function createFolder(node) {
     return;
 
   try {
-    await createNamedFolder(node, folderName);
+    const res = await createNamedFolder(node, folderName);
+    console.log( 'Folder is created.')
+    console.log(res);
   } catch (err) {
     alert("Failed to create folder: " + folderName )
   }
@@ -377,48 +412,48 @@ function createNamedFolder(node, folderName) {
   }
 
   jQuery.post({
-    url: '/api/forge/datamanagement/folder',
+    url: '/api/forge/datamanagement/folders',
     contentType: 'application/json',
+    dataType: 'json',
     data: JSON.stringify({
       'id': node.id,
       'name': folderName
     }),
     success: function (res) {
-      console.log(res)
-      def.resolve(JSON.parse(res));
+      def.resolve(res);
     },
     error: function (err) {
-      console.log(err)
       def.reject(err);
     }
   });
   return def.promise();
 }
-
-function cancelWorkitem( workitemId ){
+function cancelWorkitem(workitemId) {
 
   let def = $.Deferred();
 
-  if(workitemId == null || workitemId == ''){
+  if (workitemId == null || workitemId == '') {
     console.log('parameters are not correct.');
-    def.reject("parameters are not correct.");  
+    def.reject("parameters are not correct.");
   }
 
-  jQuery.post({
-    url: '/api/forge/da4revit/workitem/cancel',
-    contentType: 'application/json',
+
+  $.ajax({
+    url: '/api/forge/da4revit/v1/family/job',
+    type: "delete",
+    contentType: "application/json",
+    dataType: "json",
     data: JSON.stringify({
       'workitemId': workitemId
     }),
     success: function (res) {
-      console.log(res)
-      def.resolve(JSON.parse(res));
+      def.resolve(res);
     },
     error: function (err) {
-      console.log(err)
       def.reject(err);
     }
   });
+
   return def.promise();
 }
 
@@ -430,18 +465,16 @@ function getWorkitemStatus( workitemId ){
     def.reject("parameters are not correct.");  
   }
 
-  jQuery.post({
-    url: '/api/forge/da4revit/workitem/query',
-    contentType: 'application/json',
-    data: JSON.stringify({
+  jQuery.get({
+    url: '/api/forge/da4revit/v1/family/job',
+    dataType: 'json',
+    data: {
       'workitemId': workitemId
-    }),
+    },
     success: function (res) {
-      console.log(res)
-      def.resolve(JSON.parse(res));
+      def.resolve(res);
     },
     error: function (err) {
-      console.log(err)
       def.reject(err);
     }
   });

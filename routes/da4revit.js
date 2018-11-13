@@ -41,6 +41,11 @@ let router = express.Router();
 
 var workitemList = [];
 
+// Support more family types
+const FamileyType = {
+    WINDOW : 1,
+    DOOR   : 2,
+}
 
 // Middleware for obtaining a token for each request.
 router.use(async (req, res, next) => {
@@ -56,8 +61,8 @@ router.use(async (req, res, next) => {
 
 
 
-router.post('/da4revit/family/window', async(req, res, next)=>{
-    const params = req.body.Params;
+router.post('/da4revit/v1/family/job', async(req, res, next)=>{
+    const params             = req.body.Params;
     const destinateFolderUrl = req.body.TargetFolder;
 
     // Get all the parameters from client
@@ -104,8 +109,27 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
         // use 2 legged token for design automation
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
-        const oauth_token = await oauth_client.authenticate();    
-        let familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
+        const oauth_token = await oauth_client.authenticate(); 
+        let familyCreatedRes = null;
+        switch (params.FamilyType) {
+            case FamileyType.WINDOW:
+                if( params.WindowParams.length == 0 ){
+                    console.log('The inpute Window Params is not correct');
+                    res.status(400).end('The inpute Window Params is not correct');
+                    return;
+                }
+                params.WindowParams[0].FileName = params.FileName;
+                familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params.WindowParams[0], outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
+                break;
+
+            case FamilyType.DOOR:
+                // TBD:
+                break;
+
+            default:
+                break;
+
+        };
         if (familyCreatedRes == null || familyCreatedRes.statusCode != 200) {
             console.log('failed to create the revit family file');
             res.status(500).end('failed to create the revit family file');
@@ -117,7 +141,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
             "workItemId": familyCreatedRes.body.id,
             "workItemStatus": familyCreatedRes.body.status
         };
-        res.status(200).end(JSON.stringify(familyCreatedInfo));
+        res.status(201).end(JSON.stringify(familyCreatedInfo));
 
     } catch (err) {
         console.log('get exception while creating the window family')
@@ -130,7 +154,7 @@ router.post('/da4revit/family/window', async(req, res, next)=>{
 });
 
 
-router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
+router.delete('/da4revit/v1/family/job', async(req, res, next) =>{
 
     const workitemId = decodeURIComponent(req.body.workitemId);
     try {
@@ -162,8 +186,8 @@ router.post('/da4revit/workitem/cancel', async(req, res, next) =>{
     }
 })
 
-router.post('/da4revit/workitem/query', async(req, res, next) => {
-    const workitemId = decodeURIComponent(req.body.workitemId);
+router.get('/da4revit/v1/family/job', async(req, res, next) => {
+    const workitemId = decodeURIComponent(req.query.workitemId);
     try {
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
