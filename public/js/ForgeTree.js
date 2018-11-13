@@ -156,7 +156,6 @@ const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 socketio = io();
 socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
-  console.log(data);
   const status = data.Status.toLowerCase();
   updateStatus( status );
   
@@ -165,6 +164,8 @@ socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
     workingItem = null;
   }
   if(status == 'completed' && outputFolder != null){
+    console.log('Family is completely created');
+    console.log(data);
     let instance = $('#userHubsDestination').jstree(true);
     instance.refresh_node(outputFolder);
     outputFolder = null;
@@ -229,6 +230,32 @@ function setProgress( percent ){
   }
 }
 
+
+
+async function createFolder(node) {
+  if (node == null) {
+    console.log('selected node is not correct.');
+    return;
+  }
+
+  const folderName = prompt("Please specify the folder name:");
+  if (folderName == null || folderName == '')
+    return;
+
+  try {
+    const res = await createNamedFolder(node, folderName);
+    console.log( 'Folder is created.')
+    console.log(res);
+  } catch (err) {
+    alert("Failed to create folder: " + folderName )
+  }
+
+  // refresh the node
+  let instance = $('#userHubsDestination').jstree(true);
+  let selectNode = instance.get_selected(true)[0];
+  instance.refresh_node(selectNode);
+}
+
 /// Create Window Family
 async function createFamily( params , targetFolder){
   let def = $.Deferred();
@@ -239,7 +266,7 @@ async function createFamily( params , targetFolder){
   }
 
   jQuery.post({
-    url: '/api/forge/da4revit/v1/family/job',
+    url: '/api/forge/da4revit/v1/family/jobs',
     contentType: 'application/json', // The data type was sent
     dataType: 'json', // The data type will be revi
     data: JSON.stringify(data),
@@ -253,6 +280,121 @@ async function createFamily( params , targetFolder){
   return def.promise();
 }
 
+function deleteFolder(node){
+  let def = $.Deferred();
+
+  if (node == null) {
+    console.log('selected node is not correct.');
+    def.reject('selected node is not correct.');
+  }
+
+  $.ajax({
+    url: '/api/forge/datamanagement/folders',
+    type: "delete",
+    contentType: "application/json",
+    dataType: "json",
+    data: JSON.stringify({ 'id': node.id}),
+    success: function (res) {
+      def.resolve(res);
+    },
+    error: function(err){
+      def.reject(err);
+    }
+  });
+
+  return def.promise();
+}
+
+
+
+function createNamedFolder(node, folderName) {
+  let def = $.Deferred();
+
+  if (node == null || folderName == null || folderName == '') {
+    console.log('parameters are not correct.');
+    def.reject("parameters are not correct.");
+  }
+
+  jQuery.post({
+    url: '/api/forge/datamanagement/folders',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify({
+      'id': node.id,
+      'name': folderName
+    }),
+    success: function (res) {
+      def.resolve(res);
+    },
+    error: function (err) {
+      def.reject(err);
+    }
+  });
+  return def.promise();
+}
+
+
+function cancelWorkitem(workitemId) {
+  let def = $.Deferred();
+  if (workitemId == null || workitemId == '') {
+    console.log('parameters are not correct.');
+    def.reject("parameters are not correct.");
+  }
+
+  $.ajax({
+    url: '/api/forge/da4revit/v1/family/jobs',
+    type: "delete",
+    contentType: "application/json",
+    dataType: "json",
+    data: JSON.stringify({
+      'workitemId': workitemId
+    }),
+    success: function (res) {
+      def.resolve(res);
+    },
+    error: function (err) {
+      def.reject(err);
+    }
+  });
+
+  return def.promise();
+}
+
+function getWorkitemStatus( workitemId ){
+  let def = $.Deferred();
+
+  if(workitemId == null || workitemId == ''){
+    console.log('parameters are not correct.');
+    def.reject("parameters are not correct.");  
+  }
+
+  jQuery.get({
+    url: '/api/forge/da4revit/v1/family/jobs',
+    dataType: 'json',
+    data: {
+      'workitemId': workitemId
+    },
+    success: function (res) {
+      def.resolve(res);
+    },
+    error: function (err) {
+      def.reject(err);
+    }
+  });
+  return def.promise();
+}
+
+function showUser() {
+  jQuery.ajax({
+    url: '/api/forge/user/profile',
+    success: function (profile) {
+      var img = '<img src="' + profile.picture + '" height="20px">';
+      $('#userInfo').html(img + profile.name);
+    }
+  });
+}
+
+
 function prepareUserHubsTree( ) {
   $(userHubsDestination).jstree({
     'core': {
@@ -263,7 +405,6 @@ function prepareUserHubsTree( ) {
         "dataType": "json",
         'cache': false,
         'data': function (node) {
-          // $(userHubs).jstree(true).toggle_node(node);
           return { "id": node.id };
         }
       }
@@ -351,143 +492,3 @@ function autodeskCustomMenuRight(autodeskNode) {
   return items;
 }
 
-
-function deleteFolder(node){
-  let def = $.Deferred();
-
-  if (node == null) {
-    console.log('selected node is not correct.');
-    def.reject('selected node is not correct.');
-  }
-
-  $.ajax({
-    url: '/api/forge/datamanagement/folders',
-    type: "delete",
-    contentType: "application/json",
-    dataType: "json",
-    data: JSON.stringify({ 'id': node.id}),
-    success: function (res) {
-      def.resolve(res);
-    },
-    error: function(err){
-      def.reject(err);
-    }
-  });
-
-  return def.promise();
-}
-
-
-async function createFolder(node) {
-  if (node == null) {
-    console.log('selected node is not correct.');
-    return;
-  }
-
-  const folderName = prompt("Please specify the folder name:");
-  if (folderName == null || folderName == '')
-    return;
-
-  try {
-    const res = await createNamedFolder(node, folderName);
-    console.log( 'Folder is created.')
-    console.log(res);
-  } catch (err) {
-    alert("Failed to create folder: " + folderName )
-  }
-
-  // refresh the node
-  let instance = $('#userHubsDestination').jstree(true);
-  let selectNode = instance.get_selected(true)[0];
-  instance.refresh_node(selectNode);
-}
-
-function createNamedFolder(node, folderName) {
-
-  let def = $.Deferred();
-
-  if (node == null || folderName == null || folderName == '') {
-    console.log('parameters are not correct.');
-    def.reject("parameters are not correct.");
-  }
-
-  jQuery.post({
-    url: '/api/forge/datamanagement/folders',
-    contentType: 'application/json',
-    dataType: 'json',
-    data: JSON.stringify({
-      'id': node.id,
-      'name': folderName
-    }),
-    success: function (res) {
-      def.resolve(res);
-    },
-    error: function (err) {
-      def.reject(err);
-    }
-  });
-  return def.promise();
-}
-function cancelWorkitem(workitemId) {
-
-  let def = $.Deferred();
-
-  if (workitemId == null || workitemId == '') {
-    console.log('parameters are not correct.');
-    def.reject("parameters are not correct.");
-  }
-
-
-  $.ajax({
-    url: '/api/forge/da4revit/v1/family/job',
-    type: "delete",
-    contentType: "application/json",
-    dataType: "json",
-    data: JSON.stringify({
-      'workitemId': workitemId
-    }),
-    success: function (res) {
-      def.resolve(res);
-    },
-    error: function (err) {
-      def.reject(err);
-    }
-  });
-
-  return def.promise();
-}
-
-function getWorkitemStatus( workitemId ){
-  let def = $.Deferred();
-
-  if(workitemId == null || workitemId == ''){
-    console.log('parameters are not correct.');
-    def.reject("parameters are not correct.");  
-  }
-
-  jQuery.get({
-    url: '/api/forge/da4revit/v1/family/job',
-    dataType: 'json',
-    data: {
-      'workitemId': workitemId
-    },
-    success: function (res) {
-      def.resolve(res);
-    },
-    error: function (err) {
-      def.reject(err);
-    }
-  });
-  return def.promise();
-}
-
-
-function showUser() {
-  jQuery.ajax({
-    url: '/api/forge/user/profile',
-    success: function (profile) {
-      var img = '<img src="' + profile.picture + '" height="20px">';
-      $('#userInfo').html(img + profile.name);
-    }
-  });
-}

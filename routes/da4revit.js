@@ -61,7 +61,7 @@ router.use(async (req, res, next) => {
 
 
 
-router.post('/da4revit/v1/family/job', async(req, res, next)=>{
+router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
     const params             = req.body.Params;
     const destinateFolderUrl = req.body.TargetFolder;
 
@@ -154,7 +154,7 @@ router.post('/da4revit/v1/family/job', async(req, res, next)=>{
 });
 
 
-router.delete('/da4revit/v1/family/job', async(req, res, next) =>{
+router.delete('/da4revit/v1/family/jobs', async(req, res, next) =>{
 
     const workitemId = decodeURIComponent(req.body.workitemId);
     try {
@@ -186,7 +186,7 @@ router.delete('/da4revit/v1/family/job', async(req, res, next) =>{
     }
 })
 
-router.get('/da4revit/v1/family/job', async(req, res, next) => {
+router.get('/da4revit/v1/family/jobs', async(req, res, next) => {
     const workitemId = decodeURIComponent(req.query.workitemId);
     try {
         const oauth = new OAuth(req.session);
