@@ -113,13 +113,12 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
         let familyCreatedRes = null;
         switch (params.FamilyType) {
             case FamileyType.WINDOW:
-                if( params.WindowParams.length == 0 ){
-                    console.log('The inpute Window Params is not correct');
-                    res.status(400).end('The inpute Window Params is not correct');
+                if( params.WindowParams == null || params.WindowParams.Types.length == 0 ){
+                    console.log('The inpute Window Types is not correct');
+                    res.status(400).end('The inpute Window Types is not correct');
                     return;
                 }
-                params.WindowParams[0].FileName = params.FileName;
-                familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params.WindowParams[0], outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
+                familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params.WindowParams, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
                 break;
 
             case FamilyType.DOOR:

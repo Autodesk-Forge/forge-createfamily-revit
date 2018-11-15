@@ -114,9 +114,10 @@
                     </div>
                   </div><!-- /.row -->
                   <div class="row" id="windowDoubleHungParams">
-                    <div class="col-lg-6">
+
+                    <div class="col-lg-4">
                       <h4>Dimensions</h4>
-                      <div style="padding-top: 10px; text-align: left;">
+                      <div style="padding-top: 5px; text-align: left;">
 
                         <div class="input-group">
                           <span class="input-group-addon">Type Name</span>
@@ -145,15 +146,23 @@
                       </div>
                     </div>
 
-                    <div class="col-lg-6">
 
+                    <div class="col-lg-4">
+                        <h4>Types &nbsp;&nbsp;&nbsp; <button id='createNewType' class="label label-warning">Add</button></h4>
+                        <div style=" text-align: left; overflow:auto; height: 250px; background-color:azure">
+                          <div class="container-fluid list-group" id="familyTypes">
+                          </div>
+                        </div>
+                      </div>
+  
+                    <div class="col-lg-4">
                       <h4>Materials</h4>
-                      <div style="padding-top: 15px; text-align: left;">
+                      <div style="padding-top: 5px; text-align: left;">
                         <div class="form-group">
-                          <label for="glassPaneMaterialSelId" class="col-sm-7 control-label">
-                            <h5>Glass Pane Material</h5>
+                          <label for="glassPaneMaterialSelId" class="col-lg-5 control-label">
+                            <h5>Glass Pane</h5>
                           </label>
-                          <div class="col-sm-5">
+                          <div class="col-lg-7">
                             <select id="glassPaneMaterialSelId" class="form-control">
                               <option>Default</option>
                               <option>Glass</option>
@@ -166,10 +175,10 @@
                         <br>
                         <br>
                         <div class="form-group">
-                          <label for="sashMaterialSelId" class="col-sm-7 control-label">
-                            <h5>Sash Material</h5>
+                          <label for="sashMaterialSelId" class="col-sm-5 control-label">
+                            <h5>Sash</h5>
                           </label>
-                          <div class="col-sm-5">
+                          <div class="col-sm-7">
                             <select id="sashMaterialSelId" class="form-control">
                               <option>Default</option>
                               <option>Glass</option>

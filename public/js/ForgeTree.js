@@ -71,30 +71,23 @@ $(document).ready(function () {
     }
     updateStatus('started');
 
-    const typeName         = ($('#typeNameId').val()=="")? "New Type" : $('#typeNameId').val();
-    const windowHeight     = ($('#windowHeightId').val()=="")? 4: $('#windowHeightId').val();
-    const windowWidth      = ($('#windowWidthId').val()=="")? 2 : $('#windowWidthId').val();
-    const windowInset      = ($('#windowInsetId').val()=="")? 0.05: $('#windowInsetId').val();
-    const windowSillHeight = ($('#windowSillHeightId').val()=="")? 3: $('#windowSillHeightId').val();
+    // Save the current params first
+    saveCurrentParams();
+
     const glassPaneMaterial = $('#glassPaneMaterialSelId option:selected').text()
     const sashMaterial      = $('#sashMaterialSelId option:selected').text()
     const windowFamilyName = ($('#windowFamilyNameId').val()=="")? "Double Hung.rfa": $('#windowFamilyNameId').val();
 
     // TBD: support different type of family, and multiple types in one family
     const params = { 
-      FamilyType : FamileyType.WINDOW,
       FileName : windowFamilyName,    
-
-      WindowParams : [{
-        TypeName: typeName,
+      FamilyType : FamileyType.WINDOW,
+      WindowParams:{
         WindowType: WindowType.DOUBLEHUNG,
-        WindowHeight : windowHeight,
-        WindowWidth : windowWidth,
-        WindowInset : windowInset,
-        WindowSillHeight : windowSillHeight,
         GlassPaneMaterial : glassPaneMaterial,
         SashMaterial : sashMaterial,
-      }]
+        Types : familyTypes.getAllTypes(),
+      }
     };
 
     try {
@@ -135,6 +128,23 @@ $(document).ready(function () {
   });
 
 
+  $('#createNewType').click( async function(){
+    // Save the params first
+    saveCurrentParams();
+
+    familyTypes.addNewType();
+    refreshTypeList();
+  })
+
+  
+  $('#typeNameId').focusout( function(){
+    // Save the params first
+    saveCurrentParams();
+    refreshTypeList();
+  })
+  
+  refreshTypeList();
+
 });
 
 const WindowType = {
@@ -152,6 +162,87 @@ const FamileyType = {
 
 var workingItem = null;
 var outputFolder = null;
+
+
+// Manage the multiple family types
+class FamilyTypes{
+  constructor(){
+    this.typeList = new Array();
+    this.typeList.push({
+      TypeName: 'NewType',
+      WindowHeight : 4,
+      WindowWidth : 2,
+      WindowInset : 0.05,
+      WindowSillHeight : 3,
+    });
+    this.typeIndex = 0;
+  };
+
+  getCurrentIndex(){
+    return this.typeIndex;
+  };
+
+  setCurrentIndex( index ){
+    if( index >= this.typeList.length || index < 0  ){
+      console.log("the input index is not correct.");
+      return;
+    }
+    this.typeIndex = index;
+  };
+  
+  getCurrentType(){
+    return this.typeList[this.typeIndex];
+  };
+
+  setCurrentType( data ){
+    // Add more check here
+    if(data == null){
+      console.log("the input data is not valid.");
+      return;
+    }
+    this.typeList[this.typeIndex] = data;
+  }
+
+
+  addNewType(){
+    this.typeList.push({
+      TypeName: 'NewType',
+      WindowHeight : 4,
+      WindowWidth : 2,
+      WindowInset : 0.05,
+      WindowSillHeight : 3,
+    });
+
+    this.typeIndex = this.typeList.length-1;
+  }
+  
+  removeType( index ){
+    if( index >= this.typeList.length || index < 0  ){
+      console.log("the input index is not correct.");
+      return;
+    }
+
+    this.typeList.splice(index, 1);
+    this.typeIndex = 0;
+  }
+
+  getTypeByIndex( index ){
+    if( index >= this.typeList.length || index < 0  ){
+      console.log("the input index is not correct.");
+      return null;
+    }
+    return this.typeList[index];
+  }
+
+
+  getAllTypes(){
+    return this.typeList;
+  }
+};
+
+
+var familyTypes = new FamilyTypes();
+
 const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 socketio = io();
@@ -172,6 +263,84 @@ socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
   }
 })
 
+
+function refreshFamilyParams( data ){
+  if( data == null )
+    return;
+
+  $('#typeNameId')[0].value = data.TypeName;
+  $('#windowHeightId')[0].value  = data.WindowHeight;
+  $('#windowWidthId')[0].value = data.WindowWidth;
+  $('#windowInsetId')[0].value = data.WindowInset;
+  $('#windowSillHeightId')[0].value = data.WindowSillHeight;
+}
+
+function saveCurrentParams(){
+  const typeName         = ($('#typeNameId').val()=="")? "New Type" : $('#typeNameId').val();
+  const windowHeight     = ($('#windowHeightId').val()=="")? 4: $('#windowHeightId').val();
+  const windowWidth      = ($('#windowWidthId').val()=="")? 2 : $('#windowWidthId').val();
+  const windowInset      = ($('#windowInsetId').val()=="")? 0.05: $('#windowInsetId').val();
+  const windowSillHeight = ($('#windowSillHeightId').val()=="")? 3: $('#windowSillHeightId').val();
+
+  const familyParams = {
+    TypeName: typeName,
+    WindowHeight : windowHeight,
+    WindowWidth : windowWidth,
+    WindowInset : windowInset,
+    WindowSillHeight : windowSillHeight,
+  }
+
+  familyTypes.setCurrentType(familyParams);
+}
+
+function refreshTypeList() {
+  let familyTypesList = document.getElementById('familyTypes');
+  let index = familyTypesList.childElementCount;
+  while (index > 0) {
+    familyTypesList.removeChild(familyTypesList.firstElementChild);
+    index--;
+  }
+
+  const types = familyTypes.getAllTypes();
+  let id = 0;
+  types.forEach((item) => {
+    let li = document.createElement('li')
+    li.setAttribute('class', 'list-group-item');
+    li.setAttribute( 'id', id.toString());
+    li.textContent = item.TypeName;
+    li.onclick = (e) => {
+      if(e.target.tagName == "SPAN"){
+        return;
+      }
+      // Save the current params
+      saveCurrentParams();
+
+      // Remove previous focus 
+      let familyTypesList = document.getElementById('familyTypes');
+      familyTypesList.children[familyTypes.getCurrentIndex()].setAttribute("class", "list-group-item");
+
+      familyTypes.setCurrentIndex(parseInt(e.currentTarget.id));
+      e.toElement.className += " list-group-item-danger";
+      const familyParams = familyTypes.getCurrentType();
+      refreshFamilyParams(familyParams)
+    }
+
+    let spanRemove = document.createElement('span')
+    spanRemove.setAttribute('class', 'badge')
+    spanRemove.onclick = (e) => {
+      familyTypes.removeType( parseInt(e.currentTarget.parentNode.id) );
+      refreshTypeList();
+    };
+    spanRemove.textContent = 'Remove';
+    li.appendChild(spanRemove);
+
+    familyTypesList.appendChild(li);
+    id++;
+  })
+
+  familyTypesList.children[familyTypes.getCurrentIndex()].className += " list-group-item-danger";
+  refreshFamilyParams(familyTypes.getCurrentType());
+}
 
 function updateStatus( status){
   let statusText = document.getElementById('statusText');
