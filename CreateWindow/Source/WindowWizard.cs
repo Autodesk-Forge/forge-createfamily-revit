@@ -68,39 +68,40 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             }
 
             // For Window Family Creation workItem
-            WindowsDAParams countItParams;
+            WindowsDAParams windowFamilyParams;
             if ( RuntimeValue.RunOnCloud)
             {
-                countItParams = WindowsDAParams.Parse("WindowParams.json");
+                windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
             }
             else
             {
-                countItParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
+                windowFamilyParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
             }
 
             // Set the wizard data from client side
             if (m_para.m_template == "DoubleHung")
             {
-                DoubleHungWinPara dbhungPara = new DoubleHungWinPara(m_para.Validator.IsMetric);
-                dbhungPara.Height = countItParams.WindowHeight;
-                dbhungPara.Width =  countItParams.WindowWidth;
-                dbhungPara.Inset = countItParams.WindowInset;
-                dbhungPara.SillHeight = countItParams.WindowSillHeight;
-                dbhungPara.Type = countItParams.TypeName;
-                m_para.CurrentPara = dbhungPara;
-                if (!m_para.WinParaTab.Contains(dbhungPara.Type))
+                foreach( TypeDAParams type in windowFamilyParams.Types)
                 {
-                    m_para.WinParaTab.Add(dbhungPara.Type, dbhungPara);
+                    DoubleHungWinPara dbhungPara = new DoubleHungWinPara(m_para.Validator.IsMetric);
+                    dbhungPara.Height = type.WindowHeight;
+                    dbhungPara.Width = type.WindowWidth;
+                    dbhungPara.Inset = type.WindowInset;
+                    dbhungPara.SillHeight = type.WindowSillHeight;
+                    dbhungPara.Type = type.TypeName;
+                    m_para.CurrentPara = dbhungPara;
+                    if (!m_para.WinParaTab.Contains(dbhungPara.Type))
+                    {
+                        m_para.WinParaTab.Add(dbhungPara.Type, dbhungPara);
+                    }
+                    else
+                    {
+                        m_para.WinParaTab[dbhungPara.Type] = dbhungPara;
+                    }
                 }
-                else
-                {
-                    m_para.WinParaTab[dbhungPara.Type] = dbhungPara;
-                }
+                m_para.GlassMat = windowFamilyParams.GlassPaneMaterial;
+                m_para.SashMat = windowFamilyParams.SashMaterial;
             }
-
-            m_para.GlassMat = countItParams.GlassPaneMaterial;
-            m_para.SashMat = countItParams.SashMaterial;
-
             return Creation();
         }
 

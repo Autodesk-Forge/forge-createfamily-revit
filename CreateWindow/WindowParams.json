@@ -1,0 +1,1 @@
+{ "Types": [{"TypeName": "My Type", "WindowHeight": 6, "WindowWidth": 3, "WindowInset":0.05, "WindowSillHeight":3},{"TypeName": "My New Type", "WindowHeight": 8, "WindowWidth": 6, "WindowInset":0.1, "WindowSillHeight":6}], "GlassPaneMaterial": "Glass", "SashMaterial": "Maple", "WindowType":1}

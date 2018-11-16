@@ -4,13 +4,20 @@ using Newtonsoft.Json;
 
 namespace Autodesk.Forge.RevitIO.CreateWindow
 {
-    internal class WindowsDAParams
+
+    internal class TypeDAParams
     {
         public String TypeName { get; set; } = "New Type";
         public Double WindowHeight { get; set; } = 4;
         public Double WindowWidth { get; set; } = 2;
         public Double WindowInset { get; set; } = 0.05;
         public Double WindowSillHeight { get; set; } = 3;
+
+    }
+
+    internal class WindowsDAParams
+    {
+        public TypeDAParams[] Types { get; set; } = { new TypeDAParams() };
         public String GlassPaneMaterial { get; set; } = "Default";
         public String SashMaterial { get; set; } = "Default";
         public String WindowFamilyName { get; set; } = "Double Hung.rfa";
@@ -20,16 +27,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             try
             {
                 if (!File.Exists(jsonPath))
-                    return new WindowsDAParams {
-                        TypeName = "New Type",
-                        WindowHeight = 4,
-                        WindowWidth = 2,
-                        WindowInset = 0.05,
-                        WindowSillHeight = 3,
-                        GlassPaneMaterial = "Default",
-                        SashMaterial = "Default",
-                        WindowFamilyName = "Double Hung.rfa"
-                    };
+                    return new WindowsDAParams();
 
                 string jsonContents = File.ReadAllText(jsonPath);
                 return JsonConvert.DeserializeObject<WindowsDAParams>(jsonContents);
