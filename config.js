@@ -40,8 +40,8 @@ module.exports = {
         revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/windowNewFamily.rft',
         revit_IO_Endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
         revit_IO_Nick_Name: 'revitiosample',
-        revit_IO_App_Name: 'CreateDoubleHungWindowFamilyApp+prod',
-        revit_IO_Activity_Name: 'CreateDoubleHungWindowFamilyActivity+prod',
+        revit_IO_App_Name: 'CreateWindowFamilyApp+prod',
+        revit_IO_Activity_Name: 'CreateWindowFamilyActivity+prod',
         bim360_Item_Type : 'items:autodesk.bim360:File',
         bim360_Version_Type : 'versions:autodesk.bim360:File'
 

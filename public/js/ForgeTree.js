@@ -77,13 +77,14 @@ $(document).ready(function () {
     const glassPaneMaterial = $('#glassPaneMaterialSelId option:selected').text()
     const sashMaterial      = $('#sashMaterialSelId option:selected').text()
     const windowFamilyName = ($('#windowFamilyNameId').val()=="")? "Double Hung.rfa": $('#windowFamilyNameId').val();
+    const windowType =  $('input[name="windowStyle"]:checked ').val();
 
     // TBD: support different type of family, and multiple types in one family
     const params = { 
       FileName : windowFamilyName,    
       FamilyType : FamileyType.WINDOW,
       WindowParams:{
-        WindowType: WindowType.DOUBLEHUNG,
+        WindowStyle: windowType,
         GlassPaneMaterial : glassPaneMaterial,
         SashMaterial : sashMaterial,
         Types : familyTypes.getAllTypes(),
