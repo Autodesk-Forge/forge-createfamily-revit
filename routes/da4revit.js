@@ -17,29 +17,28 @@
 /////////////////////////////////////////////////////////////////////
 
 const express = require('express');
-const request = require("request");
 
 const {
-    ProjectsApi, 
     ItemsApi,
-    VersionsApi,
-    StorageRelationshipsTarget,
-    CreateStorageDataRelationships,
-    CreateStorageDataAttributes,
-    CreateStorageData,
-    CreateStorage,
-    StorageRelationshipsTargetData
+    VersionsApi
 } = require('forge-apis');
+
+const {
+    getNewCreatedStorageInfo,
+    createBodyOfPostItem,
+    createWindowFamily,
+    cancelWrokitem,
+    getWorkitemStatus,
+    workitemList
+} = require('./common/da4revitImp');
 
 const { OAuth } = require('./common/oauth');
 const { designAutomation }= require('../config');
 
-const AUTODESK_HUB_BUCKET_KEY = 'wip.dm.prod';
 const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 let router = express.Router();
 
-var workitemList = [];
 
 // Support more family types
 const FamileyType = {
@@ -47,7 +46,9 @@ const FamileyType = {
     DOOR   : 2,
 }
 
+/////////////////////////////////////////////////////////////////////
 // Middleware for obtaining a token for each request.
+/////////////////////////////////////////////////////////////////////
 router.use(async (req, res, next) => {
     // Get the access token
     const oauth = new OAuth(req.session);
@@ -60,13 +61,15 @@ router.use(async (req, res, next) => {
 });
 
 
-
-router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
+/////////////////////////////////////////////////////////////////////
+// Endpoint to create a new Revit family
+/////////////////////////////////////////////////////////////////////
+router.post('/da4revit/v1/families', async(req, res, next)=>{
     const params             = req.body.Params;
     const destinateFolderUrl = req.body.TargetFolder;
 
     // Get all the parameters from client
-    if (params == '' || destinateFolderUrl == '') {
+    if (params === '' || destinateFolderUrl === '') {
         res.status(400).end();
         return;
     }
@@ -78,7 +81,7 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
     }
 
     const destinateFolderType = destinateFolderParams[destinateFolderParams.length - 2];
-    if (destinateFolderType != 'folders') {
+    if (destinateFolderType !== 'folders') {
         console.log('info: not supported item');
         res.status(400).end('not supported item');
         return;
@@ -91,7 +94,7 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
         ////////////////////////////////////////////////////////////////////////////////
         // create a new storage for the ouput item version
         const storageInfo = await getNewCreatedStorageInfo(destinateProjectId, destinateFolderId, params.FileName, req.oauth_client, req.oauth_token);
-        if (storageInfo == null) {
+        if (storageInfo === null) {
             console.log('error: failed to create the storage');
             res.status(500).end('failed to create the storage');
             return;
@@ -99,7 +102,7 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
         const outputUrl = storageInfo.StorageUrl;
 
         const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, designAutomation.bim360_Item_Type, designAutomation.bim360_Version_Type);
-        if (createFirstVersionBody == null) {
+        if (createFirstVersionBody === null) {
             console.log('failed to create body of Post Item');
             res.status(500).end('failed to create body of Post Item');
             return;
@@ -113,7 +116,7 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
         let familyCreatedRes = null;
         switch (params.FamilyType) {
             case FamileyType.WINDOW:
-                if( params.WindowParams == null || params.WindowParams.Types.length == 0 ){
+                if( params.WindowParams === null || params.WindowParams.Types.length === 0 ){
                     console.log('The inpute Window Types is not correct');
                     res.status(400).end('The inpute Window Types is not correct');
                     return;
@@ -129,7 +132,7 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
                 break;
 
         };
-        if (familyCreatedRes == null || familyCreatedRes.statusCode != 200) {
+        if (familyCreatedRes === null || familyCreatedRes.statusCode !== 200) {
             console.log('failed to create the revit family file');
             res.status(500).end('failed to create the revit family file');
             return;
@@ -153,9 +156,9 @@ router.post('/da4revit/v1/family/jobs', async(req, res, next)=>{
 });
 
 
-router.delete('/da4revit/v1/family/jobs', async(req, res, next) =>{
+router.delete('/da4revit/v1/families/:family_workitem_id', async(req, res, next) =>{
 
-    const workitemId = decodeURIComponent(req.body.workitemId);
+    const workitemId = req.params.family_workitem_id;
     try {
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
@@ -164,9 +167,9 @@ router.delete('/da4revit/v1/family/jobs', async(req, res, next) =>{
 
         // Remove the item from list if it's cancelled
         const workitem = workitemList.find( (item) => {
-            return item.workitemId == workitemId;
+            return item.workitemId === workitemId;
         } )
-        if( workitem == undefined ){
+        if( workitem === undefined ){
             console.log('the workitem is not in the list')
             return;
         }
@@ -179,14 +182,14 @@ router.delete('/da4revit/v1/family/jobs', async(req, res, next) =>{
             'Status': "Cancelled"
         };
         global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
-        res.status(200).end(JSON.stringify(workitemStatus));
+        res.status(204).end();
     } catch (err) {
         res.status(500).end("error");
     }
 })
 
-router.get('/da4revit/v1/family/jobs', async(req, res, next) => {
-    const workitemId = decodeURIComponent(req.query.workitemId);
+router.get('/da4revit/v1/families/:family_workitem_id', async(req, res, next) => {
+    const workitemId = (req.params.family_workitem_id);
     try {
         const oauth = new OAuth(req.session);
         const oauth_client = oauth.get2LeggedClient();;
@@ -208,12 +211,12 @@ router.post('/da4revit/callback', async (req, res, next) => {
         'WorkitemId': req.body.id,
         'Status': "Success"
     };
-    if (req.body.status == 'success') {
+    if (req.body.status === 'success') {
         const workitem = workitemList.find( (item) => {
-            return item.workitemId == req.body.id;
+            return item.workitemId === req.body.id;
         } )
 
-        if( workitem == undefined ){
+        if( workitem === undefined ){
             console.log('The workitem: ' + req.body.id+ ' to callback is not in the item list')
             return;
         }
@@ -224,14 +227,14 @@ router.post('/da4revit/callback', async (req, res, next) => {
         const type = workitem.createVersionData.data.type;
         try {
             let version = null;
-            if(type == "versions"){
+            if(type === "versions"){
                 const versions = new VersionsApi();
                 version = await versions.postVersion(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
             }else{
                 const items = new ItemsApi();
                 version = await items.postItem(workitem.projectId, workitem.createVersionData, req.oauth_client, workitem.access_token_3Legged);
             }
-            if( version == null || version.statusCode != 201 ){ 
+            if( version === null || version.statusCode !== 201 ){ 
                 console.log('Falied to create a new version of the file');
                 workitemStatus.Status = 'Failed'
             }else{
@@ -258,274 +261,6 @@ router.post('/da4revit/callback', async (req, res, next) => {
     return;
 })
 
-function getWorkitemStatus(workItemId, access_token) {
 
-    return new Promise(function (resolve, reject) {
-
-        var request = require("request");
-
-        var options = {
-            method: 'GET',
-            url: designAutomation.revit_IO_Endpoint +'workitems/' + workItemId,
-            headers: {
-                Authorization: 'Bearer ' + access_token,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        request(options, function (error, response, body) {
-            if (error) {
-                reject(err);
-            } else {
-                let resp;
-                try {
-                    resp = JSON.parse(body)
-                } catch (e) {
-                    resp = body
-                }
-                if (response.statusCode >= 400) {
-                    console.log('error code: ' + response.statusCode + ' response message: ' + response.statusMessage);
-                    reject({
-                        statusCode: response.statusCode,
-                        statusMessage: response.statusMessage
-                    });
-                } else {
-                    resolve({
-                        statusCode: response.statusCode,
-                        headers: response.headers,
-                        body: resp
-                    });
-                }
-            }
-        });
-    });
-}
-
-
-function cancelWrokitem(workItemId, access_token) {
-
-    return new Promise(function (resolve, reject) {
-
-        var request = require("request");
-
-        var options = {
-            method: 'DELETE',
-            url:  designAutomation.revit_IO_Endpoint + 'workitems/' + workItemId,
-            headers: {
-                Authorization: 'Bearer ' + access_token,
-                'Content-Type': 'application/json'
-            }
-        };
-
-        request(options, function (error, response, body) {
-            if (error) {
-                reject(err);
-            } else {
-                let resp;
-                try {
-                    resp = JSON.parse(body)
-                } catch (e) {
-                    resp = body
-                }
-                if (response.statusCode >= 400) {
-                    console.log('error code: ' + response.statusCode + ' response message: ' + response.statusMessage);
-                    reject({
-                        statusCode: response.statusCode,
-                        statusMessage: response.statusMessage
-                    });
-                } else {
-                    resolve({
-                        statusCode: response.statusCode,
-                        headers: response.headers,
-                        body: resp
-                    });
-                }
-            }
-        });
-    });
-}
-
-
-
-
-function createBodyOfPostStorage(folderId, fileName) {
-    // create a new storage for the ouput item version
-    let createStorage = new CreateStorage();
-    let storageRelationshipsTargetData = new StorageRelationshipsTargetData("folders", folderId);
-    let storageRelationshipsTarget = new StorageRelationshipsTarget;
-    let createStorageDataRelationships = new CreateStorageDataRelationships();
-    let createStorageData = new CreateStorageData();
-    let createStorageDataAttributes = new CreateStorageDataAttributes();
-
-    createStorageDataAttributes.name = fileName;
-    storageRelationshipsTarget.data = storageRelationshipsTargetData;
-    createStorageDataRelationships.target = storageRelationshipsTarget;
-    createStorageData.relationships = createStorageDataRelationships;
-    createStorageData.type = 'objects';
-    createStorageData.attributes = createStorageDataAttributes;
-    createStorage.data = createStorageData;
-    
-    return createStorage;
-}
-
-
-function createBodyOfPostItem( fileName, folderId, storageId, itemType, versionType){
-    const body = 
-    {
-        "jsonapi":{
-            "version":"1.0"
-        },
-        "data":{
-            "type":"items",
-            "attributes":{
-                "name":fileName,
-                "extension":{
-                    "type":itemType,
-                    "version":"1.0"
-                }
-            },
-            "relationships":{
-                "tip":{
-                    "data":{
-                        "type":"versions",
-                        "id":"1"
-                    }
-                },
-                "parent":{
-                    "data":{
-                        "type":"folders",
-                        "id":folderId
-                    }
-                }
-            }
-        },
-        "included":[
-            {
-                "type":"versions",
-                "id":"1",
-                "attributes":{
-                    "name":fileName,
-                    "extension":{
-                        "type":versionType,
-                        "version":"1.0"
-                    }
-                },
-                "relationships":{
-                    "storage":{
-                        "data":{
-                            "type":"objects",
-                            "id":storageId
-                        }
-                    }
-                }
-            }
-        ]
-    };
-    return body;
-}
-
-async function getNewCreatedStorageInfo(projectId, folderId, fileName, oauth_client, oauth_token) {
-
-    // create body for Post Storage request
-    let createStorageBody = createBodyOfPostStorage(folderId, fileName);
-
-    const project = new ProjectsApi();
-    let storage = await project.postStorage(projectId, createStorageBody, oauth_client, oauth_token);
-    if (storage == null || storage.statusCode != 201) {
-        console.log('failed to create a storage.');
-        return null;
-    }
-
-    // setup the url of the new storage
-    const strList = storage.body.data.id.split('/');
-    if (strList.length != 2) {
-        console.log('storage id is not correct');
-        return null;
-    }
-    const storageUrl = "https://developer.api.autodesk.com/oss/v2/buckets/" + AUTODESK_HUB_BUCKET_KEY + "/objects/" + strList[1];
-    return {
-        "StorageId": storage.body.data.id,
-        "StorageUrl": storageUrl
-    };
-}
-
-
-
-function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, createVersionData, access_token_3Legged, access_token_2Legged) {
-
-    return new Promise(function (resolve, reject) {
-
-        const workitemBody = {
-
-                activityId: designAutomation.revit_IO_Nick_Name + '.'+designAutomation.revit_IO_Activity_Name,
-                arguments: {
-                    templateFile: {
-                        url: inputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token_2Legged.access_token
-                        },
-                    },
-                    windowParams: { 
-                        url: "data:application/json,"+ JSON.stringify(windowParams)
-                     },
-
-                    resultFamily: {
-                        verb: 'put',
-                        url: outputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token_3Legged.access_token
-                        },
-                    },
-                    onComplete: {
-                        verb: "post",
-                        url: designAutomation.callback_Url
-                    }
-                }
-        };    
-        var options = {
-            method: 'POST',
-            url: designAutomation.revit_IO_Endpoint+'workitems',
-            headers: {
-                Authorization: 'Bearer ' + access_token_2Legged.access_token,
-                'Content-Type': 'application/json'
-            },
-            body: workitemBody,
-            json: true
-        };
-
-        request(options, function (error, response, body) {
-            if (error) {
-                reject(error);
-            } else {
-                let resp;
-                try {
-                    resp = JSON.parse(body)
-                } catch (e) {
-                    resp = body
-                }
-                workitemList.push({
-                    workitemId: resp.id,
-                    projectId: projectId,
-                    createVersionData: createVersionData,
-                    access_token_3Legged: access_token_3Legged
-                })
-
-                if (response.statusCode >= 400) {
-                    console.log('error code: ' + response.statusCode + ' response message: ' + response.statusMessage);
-                    reject({
-                        statusCode: response.statusCode,
-                        statusMessage: response.statusMessage
-                    });
-                } else {
-                    resolve({
-                        statusCode: response.statusCode,
-                        headers: response.headers,
-                        body: resp
-                    });
-                }
-            }
-        });
-    })
-}
 
 module.exports = router;

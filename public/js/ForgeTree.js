@@ -106,9 +106,8 @@ $(document).ready(function () {
   $('#cancelBtn').click( async function () {
     if( workingItem != null){
       try{
-        const res = await cancelWorkitem(workingItem);
+        await cancelWorkitem(workingItem);
         console.log('The job is cancelled');
-        console.log(res);
       }catch(err){
         console.log('Failed to cancel the job');
       }
@@ -436,9 +435,9 @@ async function createFamily( params , targetFolder){
   }
 
   jQuery.post({
-    url: '/api/forge/da4revit/v1/family/jobs',
+    url: '/api/forge/da4revit/v1/families',
     contentType: 'application/json', // The data type was sent
-    dataType: 'json', // The data type will be revi
+    dataType: 'json', // The data type will be received
     data: JSON.stringify(data),
     success: function (res) {
       def.resolve(res);
@@ -459,11 +458,9 @@ function deleteFolder(node){
   }
 
   $.ajax({
-    url: '/api/forge/datamanagement/folders',
+    url: '/api/forge/datamanagement/v1/folders/' + encodeURIComponent(node.id),
     type: "delete",
-    contentType: "application/json",
     dataType: "json",
-    data: JSON.stringify({ 'id': node.id}),
     success: function (res) {
       def.resolve(res);
     },
@@ -486,7 +483,7 @@ function createNamedFolder(node, folderName) {
   }
 
   jQuery.post({
-    url: '/api/forge/datamanagement/folders',
+    url: '/api/forge/datamanagement/v1/folders',
     contentType: 'application/json',
     dataType: 'json',
     data: JSON.stringify({
@@ -506,19 +503,18 @@ function createNamedFolder(node, folderName) {
 
 function cancelWorkitem(workitemId) {
   let def = $.Deferred();
-  if (workitemId == null || workitemId == '') {
+  if (workitemId === null || workitemId === '') {
     console.log('parameters are not correct.');
     def.reject("parameters are not correct.");
   }
 
   $.ajax({
-    url: '/api/forge/da4revit/v1/family/jobs',
+    url: '/api/forge/da4revit/v1/families/' + encodeURIComponent(workitemId),
     type: "delete",
-    contentType: "application/json",
-    dataType: "json",
-    data: JSON.stringify({
-      'workitemId': workitemId
-    }),
+    // dataType: "json",
+    // data: JSON.stringify({
+    //   'workitemId': workitemId
+    // }),
     success: function (res) {
       def.resolve(res);
     },
@@ -539,11 +535,11 @@ function getWorkitemStatus( workitemId ){
   }
 
   jQuery.get({
-    url: '/api/forge/da4revit/v1/family/jobs',
+    url: '/api/forge/da4revit/v1/families/' + encodeURIComponent(workitemId),
     dataType: 'json',
-    data: {
-      'workitemId': workitemId
-    },
+    // data: {
+    //   'workitemId': workitemId
+    // },
     success: function (res) {
       def.resolve(res);
     },
@@ -571,7 +567,7 @@ function prepareUserHubsTree( ) {
       'themes': { "icons": true },
       'multiple': false,
       'data': {
-        "url": '/api/forge/datamanagement',
+        "url": '/api/forge/datamanagement/v1',
         "dataType": "json",
         'cache': false,
         'data': function (node) {

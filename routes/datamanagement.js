@@ -15,15 +15,13 @@
 // DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
-
-const express = require('express');
 const { HubsApi, ProjectsApi, FoldersApi, ItemsApi } = require('forge-apis');
-
+const { createFolderBody, deleteFolder } = require('./common/datamanagementImp');
 const { OAuth } = require('./common/oauth');
-
+const express = require('express');
 let router = express.Router();
 
-router.get('/datamanagement', async (req, res) => {
+router.get('/datamanagement/v1', async (req, res) => {
     // The id querystring parameter contains what was selected on the UI tree, make sure it's valid
     const href = decodeURIComponent(req.query.id);
     if (href === '') {
@@ -68,53 +66,38 @@ router.get('/datamanagement', async (req, res) => {
 });
 
 // delete a folder
-router.delete('/datamanagement/folders', async (req, res )=>{
-    const href = req.body.id;
-    if (href === '' || href == null) {
+router.delete('/datamanagement/v1/folders/:folder_url', async (req, res) => {
+    const href = req.params.folder_url;
+    if (href === '' || href === null) {
         res.status(400).end('input id is null');
         return;
     }
 
     const params = href.split('/');
-    if(params.length < 3 ){
+    if (params.length < 3) {
         res.status(400).end('input id is not correct');
         return;
     }
-    const projectId = params[params.length-3];
-    const folderId  = params[params.length-1];
+    const projectId = params[params.length - 3];
+    const folderId = params[params.length - 1];
 
-    // Get the access token
-    const oauth = new OAuth(req.session);
-    const internalToken = await oauth.getInternalToken();
-
-    var request = require("request");
-
-    var options = {
-        method: 'PATCH',
-        url: 'https://developer.api.autodesk.com/data/v1/projects/' + projectId + '/folders/' + folderId,
-        headers: {
-            'Content-Type': 'application/vnd.api+json',
-            Authorization: 'Bearer ' + internalToken.access_token
-        },
-        body: '{ "jsonapi": {"version": "1.0" },"data": {"type": "folders","id": "'+folderId+'","attributes": {"hidden":true}}}'
-    };
-    request(options, function (error, response, body) {
-      if (error) {
-        console.log(error);
-        res.status(500).end('failed to delete the folder');
-        return;
-      }else{
-        // console.log(body);
-        res.status(200).end(body);
-      }
-    });
+    try {
+        // Get the access token
+        const oauth = new OAuth(req.session);
+        const internalToken = await oauth.getInternalToken();
+        await deleteFolder(projectId, folderId, internalToken.access_token);
+        res.status(204).end();
+    } catch (err) {
+        res.status(500).end(err);
+    }
 })
 
+
 // create a subfolder
-router.post('/datamanagement/folders', async (req, res) =>{
+router.post('/datamanagement/v1/folders', async (req, res) =>{
     const href = req.body.id;
     const folderName = req.body.name;
-    if (href === '' || folderName == '') {
+    if (href === '' || folderName === '') {
         res.status(500).end();
         return;
     }
@@ -131,7 +114,7 @@ router.post('/datamanagement/folders', async (req, res) =>{
     }
 
     const resourceName = params[params.length - 2];
-    if (resourceName != 'folders') {
+    if (resourceName !== 'folders') {
         res.status(400).end('not supported item');
         return;
     }
@@ -145,35 +128,11 @@ router.post('/datamanagement/folders', async (req, res) =>{
     const oauth = new OAuth(req.session);
     const internalToken = await oauth.getInternalToken();
     
-    // TBD: the parameter body type(CreateBody) is not defined yet, use raw json data as body for now
-    const folderBody = {
-        "jsonapi": {
-          "version": "1.0"
-        },
-        "data": {
-          "type": "folders",
-          "attributes": {
-            "name": folderName,
-            "extension": {
-              "type": "folders:autodesk.bim360:Folder",
-              "version": "1.0"
-            }
-          },
-          "relationships": {
-            "parent": {
-              "data": {
-                "type": "folders",
-                "id": folderId
-              }
-            }
-          }
-        }
-      }
-
+    const folderBody = createFolderBody(folderName, folderId);
       try{
         let newFolder = await folders.postFolder( projectId, folderBody, oauth.getClient(), internalToken );
         console.log(newFolder);
-        if(newFolder == null || newFolder.statusCode != 201){
+        if(newFolder === null || newFolder.statusCode !== 201){
             console.log('failed to create a folder.');
             res.status(500).end('failed to create a folder.');
             return;
@@ -242,7 +201,7 @@ async function getFolders(hubId, projectId, oauthClient, credentials, res) {
     res.json(folders.body.data.map((item) => {
         return createTreeNode(
             item.links.self.href,
-            item.attributes.displayName == null ? item.attributes.name : item.attributes.displayName,
+            item.attributes.displayName === null ? item.attributes.name : item.attributes.displayName,
             item.type,
             true
         );
@@ -253,7 +212,7 @@ async function getFolderContents(projectId, folderId, oauthClient, credentials, 
     const folders = new FoldersApi();
     const contents = await folders.getFolderContents(projectId, folderId, {}, oauthClient, credentials);
     const treeNodes = contents.body.data.map((item) => {
-        var name = (item.attributes.name == null ? item.attributes.displayName : item.attributes.name);
+        var name = (item.attributes.displayName !== null ? item.attributes.displayName : item.attributes.name);
         if (name !== '') { // BIM 360 Items with no displayName also don't have storage, so not file to transfer
             return createTreeNode(
                 item.links.self.href,
@@ -274,11 +233,11 @@ async function getVersions(projectId, itemId, oauthClient, credentials, res) {
     res.json(versions.body.data.map((version) => {
         const dateFormated = new Date(version.attributes.lastModifiedTime).toLocaleString();
         const versionst = version.id.match(/^(.*)\?version=(\d+)$/)[2];
-        const viewerUrn = (version.relationships != null && version.relationships.derivatives != null ? version.relationships.derivatives.data.id : null);
+        const viewerUrn = (version.relationships !== null && version.relationships.derivatives !== null ? version.relationships.derivatives.data.id : null);
         return createTreeNode(
             viewerUrn,
             decodeURI('v' + versionst + ': ' + dateFormated + ' by ' + version.attributes.lastModifiedUserName),
-            (viewerUrn != null ? 'versions' : 'unsupported'),
+            (viewerUrn !== null ? 'versions' : 'unsupported'),
             false
         );
     }));
