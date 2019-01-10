@@ -169,7 +169,7 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
         }
 ```
 
-- Step: Update the method **WindowWizard.RunWizard()** as follow to use the different way for parameter collection:
+- Update the method **WindowWizard.RunWizard()** as follow to use the different way for parameter collection:
 ```
         public bool RunWizard()
         {
