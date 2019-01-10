@@ -65,6 +65,29 @@ Windows (use **Node.js command line** from Start menu)
 
 Open the browser: [http://localhost:3000](http://localhost:3000).
 
+## Main Backend API used
+### File upgrade API based on Design Automation API
+- **POST      /api/forge/da4revit/v1/families**
+- **GET       /api/forge/da4revit/v1/families/:family_workitem_id**
+- **DELETE    /api/forge/da4revit/v1/families/:family_workitem_id**
+- **POST      /api/forge/da4revit/callback**
+- This endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+
+### File/Folder operation API based on Data Management API
+- **POST      /api/forge/datamanagement/v1/folder**
+- **DELETE    /api/forge/datamanagement/v1/folder/:folder_url**
+- **GET       /api/forge/datamanagement/v1**
+
+### User information API
+- **GET       /api/forge/user/v1/profile**
+
+### OAuth information API
+- **GET       /api/forge/oauth/v1/url**
+- **GET       /api/forge/oauth/v1/signout**
+- **GET       /api/forge/oauth/v1/token**
+- **GET      /api/forge/callback/oauth**
+
+
 ## Packages used
 
 The [Autodesk Forge](https://www.npmjs.com/package/forge-apis) packages is included by default. Some other non-Autodesk packaged are used, including [express](https://www.npmjs.com/package/express) and [multer](https://www.npmjs.com/package/multer) for upload.
@@ -97,8 +120,7 @@ After installing Github desktop for Windows, on the Git Shell, if you see a ***e
     git config --global http.sslverify "false"
 
 ### Limitation
-- Only Double Hung window is supported
-- Currently, the Window family template which is used to create the family is hardcoded, will improve this to let user specify the template later.
+- The Window family template which is used to create the family should be uploaded first.
 
 ## License
 This sample is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT). Please see the [LICENSE](LICENSE) file for full details.
