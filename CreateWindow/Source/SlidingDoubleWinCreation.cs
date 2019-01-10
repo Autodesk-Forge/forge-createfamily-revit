@@ -1,4 +1,4 @@
-//
+﻿//
 // (C) Copyright 2003-2017 by Autodesk, Inc.
 //
 // Permission to use, copy, modify, and distribute this software in
@@ -32,7 +32,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
     /// <summary>
     /// Inherited from WindowCreation class
     /// </summary>
-    class DoubleHungWinCreation : WindowCreation
+    class SlidingDoubleWinCreation : WindowCreation
     {
         #region Class Memeber Variables
         /// <summary>
@@ -84,6 +84,11 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
         /// store the sill referenceplane
         /// </summary>
         ReferencePlane m_sillPlane;
+
+
+        ReferencePlane m_leftPlane;
+
+        ReferencePlane m_rightPlane;
 
         /// <summary>
         /// store the right view of the document
@@ -147,11 +152,11 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
         #endregion
 
         /// <summary>
-        /// constructor of DoubleHungWinCreation
+        /// constructor of SlidingDoubleWinCreation
         /// </summary>
         /// <param name="para">WizardParameter</param>
         /// <param name="commandData">ExternalCommandData</param>
-        public DoubleHungWinCreation(WizardParameter para, CreateWindowData commandData)
+        public SlidingDoubleWinCreation(WizardParameter para, CreateWindowData commandData)
             : base(para)
         {
             m_application = commandData.Application;
@@ -179,14 +184,14 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
                 }
                 else
                 {
-                    para.PathName = "C:\\Users\\zhongwu\\Documents\\DoubleHungWin.rfa";
+                    para.PathName = "C:\\Users\\zhongwu\\Documents\\SlidingDoubleWin.rfa";
                 }
 
                 CreateCommon();
 
                 tran.Commit();
             }
-            
+
         }
 
         #region Class Implementation
@@ -298,21 +303,12 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             double sashDepth = (frameDepth - m_windowInset) / 2;
 
             //get the exterior view and sash referenceplane which are used in this process
-            Autodesk.Revit.DB.View exteriorView = Utility.GetViewByName("Exterior",m_application, m_document);
+            Autodesk.Revit.DB.View exteriorView = Utility.GetViewByName("Exterior", m_application, m_document);
             SubTransaction subTransaction = new SubTransaction(m_document);
             subTransaction.Start();
 
-            //add a middle reference plane between the top referenceplane and sill referenceplane
-            CreateRefPlane refPlaneCreator = new CreateRefPlane();
-            ReferencePlane middlePlane = refPlaneCreator.Create(m_document, m_topPlane, exteriorView, new Autodesk.Revit.DB.XYZ(0, 0, -m_height / 2), new Autodesk.Revit.DB.XYZ(0, -1, 0), "tempmiddle");
-            m_document.Regenerate();
-
-            //add dimension between top, sill, and middle reference plane, make the dimension segment equal
-            Dimension dim = m_dimensionCreator.AddDimension(exteriorView, m_topPlane, m_sillPlane, middlePlane);
-            dim.AreSegmentsEqual = true;
-
-            //create first sash           
-            CurveArray curveArr5 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1, -m_width / 2 + frameCurveOffset1, m_sillHeight + m_height / 2 + sashCurveOffset / 2, m_sillHeight + frameCurveOffset1, 0);
+            //create left sash           
+            CurveArray curveArr5 = m_extrusionCreator.CreateRectangle(sashCurveOffset / 2, -m_width / 2 + frameCurveOffset1, m_sillHeight + m_height - frameCurveOffset1, m_sillHeight + frameCurveOffset1, 0);
             CurveArray curveArr6 = m_extrusionCreator.CreateCurveArrayByOffset(curveArr5, sashCurveOffset);
             m_document.Regenerate();
 
@@ -330,8 +326,8 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             sashWithPlane1.IsLocked = true;
             sash1.SetVisibility(CreateVisibility());
 
-            //create second sash
-            CurveArray curveArr7 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1, -m_width / 2 + frameCurveOffset1, m_sillHeight + m_height - frameCurveOffset1, m_sillHeight + m_height / 2 - sashCurveOffset / 2, 0);
+            //create right sash
+            CurveArray curveArr7 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1, -sashCurveOffset / 2, m_sillHeight + m_height - frameCurveOffset1, m_sillHeight + frameCurveOffset1, 0);
             CurveArray curveArr8 = m_extrusionCreator.CreateCurveArrayByOffset(curveArr7, sashCurveOffset);
             m_document.Regenerate();
 
@@ -362,6 +358,8 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             subTransaction.Commit();
         }
 
+
+
         /// <summary>
         /// The implementation of CreateGlass(), creating the Window Glass Solid Geometry      
         /// </summary>
@@ -374,10 +372,10 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             double glassDepth = 0.05;
             double glassOffsetSash = 0.05; //from the exterior of the sash
 
-            //create first glass            
+            //create left glass            
             SubTransaction subTransaction = new SubTransaction(m_document);
             subTransaction.Start();
-            CurveArray curveArr9 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1 - sashCurveOffset, -m_width / 2 + frameCurveOffset1 + sashCurveOffset, m_sillHeight + m_height / 2 - sashCurveOffset / 2, m_sillHeight + frameCurveOffset1 + sashCurveOffset, 0);
+            CurveArray curveArr9 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1 - sashCurveOffset, sashCurveOffset / 2, m_sillHeight + m_height - frameCurveOffset1 - sashCurveOffset, m_sillHeight + frameCurveOffset1 + sashCurveOffset, 0);
             m_document.Regenerate();
 
             CurveArrArray curveArrArray5 = new CurveArrArray();
@@ -393,8 +391,8 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             Dimension glass1WithSashPlane = m_dimensionCreator.AddDimension(m_rightView, m_sashPlane, eglassFace1);
             glass1WithSashPlane.IsLocked = true;
 
-            //create the second glass
-            CurveArray curveArr10 = m_extrusionCreator.CreateRectangle(m_width / 2 - frameCurveOffset1 - sashCurveOffset, -m_width / 2 + frameCurveOffset1 + sashCurveOffset, m_sillHeight + m_height - frameCurveOffset1 - sashCurveOffset, m_sillHeight + m_height / 2 + sashCurveOffset / 2, 0);
+            //create the right glass
+            CurveArray curveArr10 = m_extrusionCreator.CreateRectangle(-sashCurveOffset / 2, -m_width / 2 + frameCurveOffset1 + sashCurveOffset, m_sillHeight + m_height - frameCurveOffset1 - sashCurveOffset, m_sillHeight + frameCurveOffset1 + sashCurveOffset, 0);
             CurveArrArray curveArrArray6 = new CurveArrArray();
             curveArrArray6.Append(curveArr10);
             Extrusion glass2 = m_extrusionCreator.NewExtrusion(curveArrArray6, m_sashPlane, glassOffsetSash + glassDepth, glassOffsetSash);
@@ -420,6 +418,8 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             glass2.get_Parameter(BuiltInParameter.MATERIAL_ID_PARAM).Set(id);
             subTransaction.Commit();
         }
+
+
 
         /// <summary>
         /// The implementation of CreateMaterial()
@@ -464,7 +464,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             }
 
             subTransaction.Commit();
-            
+
         }
 
         /// <summary>
@@ -633,6 +633,11 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
                     m_topPlane = p;
                 if (p.Name.Equals("Sill") || p.Name.Equals("Bottom"))
                     m_sillPlane = p;
+                if (p.Name.Equals("Left"))
+                    m_leftPlane = p;
+                if (p.Name.Equals("Right"))
+                    m_rightPlane = p;
+
             }
         }
 
@@ -643,12 +648,12 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
         /// <returns>indicate whether the NewType is successful</returns>
         private bool newFamilyType(WindowParameter para)//string typeName, double height, double width, double sillHeight)
         {
-            DoubleHungWinPara dbhungPara = para as DoubleHungWinPara;
-            string typeName = dbhungPara.Type;
-            double height = dbhungPara.Height;
-            double width = dbhungPara.Width;
-            double sillHeight = dbhungPara.SillHeight;
-            double windowInset = dbhungPara.Inset;
+            SlidingDoubleWinPara slidingDoubleWinPara = para as SlidingDoubleWinPara;
+            string typeName = slidingDoubleWinPara.Type;
+            double height = slidingDoubleWinPara.Height;
+            double width = slidingDoubleWinPara.Width;
+            double sillHeight = slidingDoubleWinPara.SillHeight;
+            double windowInset = slidingDoubleWinPara.Inset;
             switch (m_document.DisplayUnitSystem)
             {
                 case Autodesk.Revit.DB.DisplayUnit.METRIC:

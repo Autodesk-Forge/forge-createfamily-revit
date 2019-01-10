@@ -277,6 +277,167 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
 
 ## Extend to support more WindowFamily Types
 - Add 2 more classes(FixedWinCreation, SlidingDoubleWinCreation) which derived from WindowCreation to support more window types, check the files **FixedWinCreation.cs** & **SlidingDoubleWinCreation.cs** for the details.
+- Add 2 more classes(FixedWinPara, SlidingDoubleWinPara) which derived from **WindowParameter** to handle the specific type of window in WindowParameter.cs, the code looks like:
+```
+    /// <summary>
+    /// This class inherits from WindowParameter
+    /// TBD: Add more specific parameters related Fixed window
+    /// </summary>
+    public class FixedWinPara : WindowParameter
+    {
+        /// <summary>
+        /// store the m_inset
+        /// </summary>
+        double m_inset = 0.0;
+
+        /// <summary>
+        /// store the m_sillHeight
+        /// </summary>
+        double m_sillHeight = 0.0;
+
+        #region
+        /// <summary>
+        /// set/get Inset property
+        /// </summary>
+        public double Inset
+        {
+            set
+            {
+                m_inset = value;
+            }
+            get
+            {
+                return m_inset;
+            }
+        }
+
+        /// <summary>
+        /// set/get SillHeight property
+        /// </summary>
+        public double SillHeight
+        {
+            set
+            {
+                m_sillHeight = value;
+            }
+            get
+            {
+                return m_sillHeight;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// constructor of FixedWinPara
+        /// </summary>
+        /// <param name="isMetric">indicate whether the template is metric of imperial</param>
+        public FixedWinPara(bool isMetric)
+            : base(isMetric)
+        {
+            if (isMetric)
+            {
+                m_inset = 20;
+                m_sillHeight = 800;
+            }
+            else
+            {
+                m_inset = 0.05;
+                m_sillHeight = 3;
+            }
+        }
+
+        /// <summary>
+        /// constructor of FixedWinPara
+        /// </summary>
+        /// <param name="fixedPara">FixedWinPara</param>
+        public FixedWinPara(FixedWinPara fixedPara)
+            : base(fixedPara)
+        {
+            m_inset = fixedPara.Inset;
+            m_sillHeight = fixedPara.SillHeight;
+        }
+    }
+
+
+    /// <summary>
+    /// This class inherits from WindowParameter,
+    /// TBD: Add more specific parameters related SlidingDouble window
+    /// </summary>
+    public class SlidingDoubleWinPara : WindowParameter
+    {
+        /// <summary>
+        /// store the m_inset
+        /// </summary>
+        double m_inset = 0.0;
+
+        /// <summary>
+        /// store the m_sillHeight
+        /// </summary>
+        double m_sillHeight = 0.0;
+
+        #region
+        /// <summary>
+        /// set/get Inset property
+        /// </summary>
+        public double Inset
+        {
+            set
+            {
+                m_inset = value;
+            }
+            get
+            {
+                return m_inset;
+            }
+        }
+
+        /// <summary>
+        /// set/get SillHeight property
+        /// </summary>
+        public double SillHeight
+        {
+            set
+            {
+                m_sillHeight = value;
+            }
+            get
+            {
+                return m_sillHeight;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// constructor of SlidingDoubleWinPara
+        /// </summary>
+        /// <param name="isMetric">indicate whether the template is metric of imperial</param>
+        public SlidingDoubleWinPara(bool isMetric)
+            : base(isMetric)
+        {
+            if (isMetric)
+            {
+                m_inset = 20;
+                m_sillHeight = 800;
+            }
+            else
+            {
+                m_inset = 0.05;
+                m_sillHeight = 3;
+            }
+        }
+
+        /// <summary>
+        /// constructor of SlidingDoubleWinPara
+        /// </summary>
+        /// <param name="slidingDoublePara">SlidingDoubleWinPara</param>
+        public SlidingDoubleWinPara(FixedWinPara slidingDoublePara)
+            : base(slidingDoublePara)
+        {
+            m_inset = slidingDoublePara.Inset;
+            m_sillHeight = slidingDoublePara.SillHeight;
+        }
+    }
+```
 - Modify the WindowWizard.RunWizard() to accordingly to support the 2 types as follow:
 ```    
         public bool RunWizard()

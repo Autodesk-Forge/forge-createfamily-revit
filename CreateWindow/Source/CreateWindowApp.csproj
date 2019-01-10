@@ -90,8 +90,10 @@
     <Compile Include="CreateExtrusion.cs" />
     <Compile Include="CreateReferencePlane.cs" />
     <Compile Include="DoubleHungWinCreation.cs" />
+    <Compile Include="FixedWinCreation.cs" />
     <Compile Include="GeoHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SlidingDoubleWinCreation.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="ValidateWindowParameter.cs" />
     <Compile Include="WindowCreation.cs" />

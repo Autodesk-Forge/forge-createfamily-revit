@@ -18,6 +18,8 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
     internal class WindowsDAParams
     {
         public TypeDAParams[] Types { get; set; } = { new TypeDAParams() };
+
+        public String WindowStyle { get; set; } = "DoubleHungWindow";
         public String GlassPaneMaterial { get; set; } = "Default";
         public String SashMaterial { get; set; } = "Default";
         public String WindowFamilyName { get; set; } = "Double Hung.rfa";

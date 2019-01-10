@@ -381,4 +381,166 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
             m_sillHeight = dbhungPara.SillHeight;
         }
     }
+
+
+    /// <summary>
+    /// This class inherits from WindowParameter
+    /// TBD: Add more specific parameters related Fixed window
+    /// </summary>
+    public class FixedWinPara : WindowParameter
+    {
+        /// <summary>
+        /// store the m_inset
+        /// </summary>
+        double m_inset = 0.0;
+
+        /// <summary>
+        /// store the m_sillHeight
+        /// </summary>
+        double m_sillHeight = 0.0;
+
+        #region
+        /// <summary>
+        /// set/get Inset property
+        /// </summary>
+        public double Inset
+        {
+            set
+            {
+                m_inset = value;
+            }
+            get
+            {
+                return m_inset;
+            }
+        }
+
+        /// <summary>
+        /// set/get SillHeight property
+        /// </summary>
+        public double SillHeight
+        {
+            set
+            {
+                m_sillHeight = value;
+            }
+            get
+            {
+                return m_sillHeight;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// constructor of FixedWinPara
+        /// </summary>
+        /// <param name="isMetric">indicate whether the template is metric of imperial</param>
+        public FixedWinPara(bool isMetric)
+            : base(isMetric)
+        {
+            if (isMetric)
+            {
+                m_inset = 20;
+                m_sillHeight = 800;
+            }
+            else
+            {
+                m_inset = 0.05;
+                m_sillHeight = 3;
+            }
+        }
+
+        /// <summary>
+        /// constructor of FixedWinPara
+        /// </summary>
+        /// <param name="fixedPara">FixedWinPara</param>
+        public FixedWinPara(FixedWinPara fixedPara)
+            : base(fixedPara)
+        {
+            m_inset = fixedPara.Inset;
+            m_sillHeight = fixedPara.SillHeight;
+        }
+    }
+
+
+
+    /// <summary>
+    /// This class inherits from WindowParameter,
+    /// TBD: Add more specific parameters related SlidingDouble window
+    /// </summary>
+    public class SlidingDoubleWinPara : WindowParameter
+    {
+        /// <summary>
+        /// store the m_inset
+        /// </summary>
+        double m_inset = 0.0;
+
+        /// <summary>
+        /// store the m_sillHeight
+        /// </summary>
+        double m_sillHeight = 0.0;
+
+        #region
+        /// <summary>
+        /// set/get Inset property
+        /// </summary>
+        public double Inset
+        {
+            set
+            {
+                m_inset = value;
+            }
+            get
+            {
+                return m_inset;
+            }
+        }
+
+        /// <summary>
+        /// set/get SillHeight property
+        /// </summary>
+        public double SillHeight
+        {
+            set
+            {
+                m_sillHeight = value;
+            }
+            get
+            {
+                return m_sillHeight;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// constructor of SlidingDoubleWinPara
+        /// </summary>
+        /// <param name="isMetric">indicate whether the template is metric of imperial</param>
+        public SlidingDoubleWinPara(bool isMetric)
+            : base(isMetric)
+        {
+            if (isMetric)
+            {
+                m_inset = 20;
+                m_sillHeight = 800;
+            }
+            else
+            {
+                m_inset = 0.05;
+                m_sillHeight = 3;
+            }
+        }
+
+        /// <summary>
+        /// constructor of SlidingDoubleWinPara
+        /// </summary>
+        /// <param name="slidingDoublePara">SlidingDoubleWinPara</param>
+        public SlidingDoubleWinPara(FixedWinPara slidingDoublePara)
+            : base(slidingDoublePara)
+        {
+            m_inset = slidingDoublePara.Inset;
+            m_sillHeight = slidingDoublePara.SillHeight;
+        }
+    }
+
 }

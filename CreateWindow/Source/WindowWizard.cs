@@ -60,13 +60,6 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
         /// <returns>the process result</returns>
         public bool RunWizard()
         {
-            m_para = new WizardParameter();           
-            m_para.m_template = "DoubleHung";
-            if (m_para.m_template == "DoubleHung")
-            {
-                m_winCreator = new DoubleHungWinCreation(m_para, m_commandData);
-            }
-
             // For Window Family Creation workItem
             WindowsDAParams windowFamilyParams;
             if ( RuntimeValue.RunOnCloud)
@@ -78,25 +71,78 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
                 windowFamilyParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
             }
 
-            // Set the wizard data from client side
-            if (m_para.m_template == "DoubleHung")
+            m_para = new WizardParameter();
+            m_para.m_template = windowFamilyParams.WindowStyle;
+
+            if (m_para.m_template.Equals("DoubleHungWindow", StringComparison.CurrentCultureIgnoreCase))
             {
-                foreach( TypeDAParams type in windowFamilyParams.Types)
+                m_winCreator = new DoubleHungWinCreation(m_para, m_commandData);
+                foreach (TypeDAParams type in windowFamilyParams.Types)
                 {
-                    DoubleHungWinPara dbhungPara = new DoubleHungWinPara(m_para.Validator.IsMetric);
-                    dbhungPara.Height = type.WindowHeight;
-                    dbhungPara.Width = type.WindowWidth;
-                    dbhungPara.Inset = type.WindowInset;
-                    dbhungPara.SillHeight = type.WindowSillHeight;
-                    dbhungPara.Type = type.TypeName;
-                    m_para.CurrentPara = dbhungPara;
-                    if (!m_para.WinParaTab.Contains(dbhungPara.Type))
+                    DoubleHungWinPara dbhungWinPara = new DoubleHungWinPara(m_para.Validator.IsMetric);
+                    dbhungWinPara.Height = type.WindowHeight;
+                    dbhungWinPara.Width = type.WindowWidth;
+                    dbhungWinPara.Inset = type.WindowInset;
+                    dbhungWinPara.SillHeight = type.WindowSillHeight;
+                    dbhungWinPara.Type = type.TypeName;
+                    m_para.CurrentPara = dbhungWinPara;
+                    if (!m_para.WinParaTab.Contains(dbhungWinPara.Type))
                     {
-                        m_para.WinParaTab.Add(dbhungPara.Type, dbhungPara);
+                        m_para.WinParaTab.Add(dbhungWinPara.Type, dbhungWinPara);
                     }
                     else
                     {
-                        m_para.WinParaTab[dbhungPara.Type] = dbhungPara;
+                        m_para.WinParaTab[dbhungWinPara.Type] = dbhungWinPara;
+                    }
+                }
+                m_para.GlassMat = windowFamilyParams.GlassPaneMaterial;
+                m_para.SashMat = windowFamilyParams.SashMaterial;
+            }
+            else if(m_para.m_template == "SlidingDoubleWindow")
+            {
+                m_winCreator = new SlidingDoubleWinCreation(m_para, m_commandData);
+                // TBD: Collect the params of Sliding Double window
+                foreach (TypeDAParams type in windowFamilyParams.Types)
+                {
+                    SlidingDoubleWinPara slidingDoubleWinPara = new SlidingDoubleWinPara(m_para.Validator.IsMetric);
+                    slidingDoubleWinPara.Height = type.WindowHeight;
+                    slidingDoubleWinPara.Width = type.WindowWidth;
+                    slidingDoubleWinPara.Inset = type.WindowInset;
+                    slidingDoubleWinPara.SillHeight = type.WindowSillHeight;
+                    slidingDoubleWinPara.Type = type.TypeName;
+                    m_para.CurrentPara = slidingDoubleWinPara;
+                    if (!m_para.WinParaTab.Contains(slidingDoubleWinPara.Type))
+                    {
+                        m_para.WinParaTab.Add(slidingDoubleWinPara.Type, slidingDoubleWinPara);
+                    }
+                    else
+                    {
+                        m_para.WinParaTab[slidingDoubleWinPara.Type] = slidingDoubleWinPara;
+                    }
+                }
+                m_para.GlassMat = windowFamilyParams.GlassPaneMaterial;
+                m_para.SashMat = windowFamilyParams.SashMaterial;
+            }
+            else
+            {
+                m_winCreator = new FixedWinCreation(m_para, m_commandData);
+                // TBD: Collect the params of Fixed Double window
+                foreach (TypeDAParams type in windowFamilyParams.Types)
+                {
+                    FixedWinPara fixedWinPara = new FixedWinPara(m_para.Validator.IsMetric);
+                    fixedWinPara.Height = type.WindowHeight;
+                    fixedWinPara.Width = type.WindowWidth;
+                    fixedWinPara.Inset = type.WindowInset;
+                    fixedWinPara.SillHeight = type.WindowSillHeight;
+                    fixedWinPara.Type = type.TypeName;
+                    m_para.CurrentPara = fixedWinPara;
+                    if (!m_para.WinParaTab.Contains(fixedWinPara.Type))
+                    {
+                        m_para.WinParaTab.Add(fixedWinPara.Type, fixedWinPara);
+                    }
+                    else
+                    {
+                        m_para.WinParaTab[fixedWinPara.Type] = fixedWinPara;
                     }
                 }
                 m_para.GlassMat = windowFamilyParams.GlassPaneMaterial;
