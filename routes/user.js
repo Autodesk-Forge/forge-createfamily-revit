@@ -23,7 +23,7 @@ const { OAuth } = require('./common/oauth');
 
 let router = express.Router();
 
-router.get('/user/profile', async (req, res) => {
+router.get('/user/v1/profile', async (req, res) => {
     const oauth = new OAuth(req.session);
     const internalToken = await oauth.getInternalToken();
     const user = new UserProfileApi();
