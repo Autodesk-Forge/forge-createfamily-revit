@@ -101,18 +101,7 @@ Documentation:
 - [Viewer](https://developer.autodesk.com/en/docs/viewer/v6)
 
 ### Tips & Tricks
-
-For local development/testing, consider use [nodemon](https://www.npmjs.com/package/nodemon) package, which auto restart your node application after any modification on your code. To install it, use:
-
-    sudo npm install -g nodemon
-
-Then, instead of **npm run dev**, use the following:
-
-    npm run nodemon
-
-Which executes **nodemon server.js --ignore www/**, where the **--ignore** parameter indicates that the app should not restart if files under **www** folder are modified.
-
-- **/api/forge/da4revit/callback**, this endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+- **/api/forge/da4revit/callback**, the endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
 
 ### Troubleshooting
 
