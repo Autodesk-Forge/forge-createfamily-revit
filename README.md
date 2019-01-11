@@ -67,25 +67,24 @@ Open the browser: [http://localhost:3000](http://localhost:3000).
 
 ## Main Backend API used
 ### File upgrade API based on Design Automation API
-- **POST      /api/forge/da4revit/v1/families**
-- **GET       /api/forge/da4revit/v1/families/:family_workitem_id**
-- **DELETE    /api/forge/da4revit/v1/families/:family_workitem_id**
-- **POST      /api/forge/da4revit/callback**
-- This endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+- POST      /api/forge/da4revit/v1/families
+- GET       /api/forge/da4revit/v1/families/:family_workitem_id
+- DELETE    /api/forge/da4revit/v1/families/:family_workitem_id
+- POST      /api/forge/da4revit/callback
 
 ### File/Folder operation API based on Data Management API
-- **POST      /api/forge/datamanagement/v1/folder**
-- **DELETE    /api/forge/datamanagement/v1/folder/:folder_url**
-- **GET       /api/forge/datamanagement/v1**
+- POST      /api/forge/datamanagement/v1/folder
+- DELETE    /api/forge/datamanagement/v1/folder/:folder_url
+- GET       /api/forge/datamanagement/v1
 
 ### User information API
-- **GET       /api/forge/user/v1/profile**
+- GET       /api/forge/user/v1/profile
 
 ### OAuth information API
-- **GET       /api/forge/oauth/v1/url**
-- **GET       /api/forge/oauth/v1/signout**
-- **GET       /api/forge/oauth/v1/token**
-- **GET      /api/forge/callback/oauth**
+- GET       /api/forge/oauth/v1/url
+- GET       /api/forge/oauth/v1/signout
+- GET       /api/forge/oauth/v1/token
+- GET      /api/forge/callback/oauth
 
 
 ## Packages used
@@ -112,6 +111,8 @@ Then, instead of **npm run dev**, use the following:
     npm run nodemon
 
 Which executes **nodemon server.js --ignore www/**, where the **--ignore** parameter indicates that the app should not restart if files under **www** folder are modified.
+
+- **/api/forge/da4revit/callback**, this endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
 
 ### Troubleshooting
 
