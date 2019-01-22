@@ -24,9 +24,9 @@ This sample demostrated how to create a window family using Design Automation fo
 [https://familycreationsample.herokuapp.com/](https://familycreationsample.herokuapp.com/)
 
 # Main Parts of The Work
-1. Migrate the existing Revit WindowWizard Plugin to be used within AppBundle of Design Automation for Revit. Please check //CreateWindow/PlugIn 
+1. Migrate the existing Revit WindowWizard Plugin to be used within AppBundle of Design Automation for Revit. Please check [PlugIn](./CreateWindow/PlugIn/) 
 
-2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under //CreateWindow/Postman Collection
+2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under [Postman Collection](./CreateWindow/PostmanCollection/) 
 
 3. Create the Web App to call the workitem.
 
