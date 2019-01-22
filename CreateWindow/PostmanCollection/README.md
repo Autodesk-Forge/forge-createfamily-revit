@@ -5,7 +5,7 @@
 Postman collection to create App, define activity, and call the WorkItem. 
 
 ## Setup
-`Before start with Design Automaiton workflow, I strongly recommend you to read throught all the details at [Design Automation for Revit Documenation](https://github.com/Developer-Autodesk/design-automation-for-revit), and check the following steps if you already have an basic understanding.`
+`Before start with Design Automaiton workflow, I strongly recommend you to read throught all the details at` [Design Automation for Revit Documenation](https://github.com/Developer-Autodesk/design-automation-for-revit),` and check the following steps if you already have an basic understanding.`
 
 1. Download or update Postman from [here](https://www.getpostman.com/apps).
 
