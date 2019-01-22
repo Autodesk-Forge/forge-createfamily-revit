@@ -1,4 +1,4 @@
-# design.automation.revit.create.family.nodejs.sample
+# design.automation.revit.window.family.creation.nodejs.sample
 
 [![Node.js](https://img.shields.io/badge/Node.js-8.0-blue.svg)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-4.0-blue.svg)](https://www.npmjs.com/)
@@ -15,7 +15,7 @@
 
 # Description
 
-This sample demostrated how to create a window family using Design Automation for Revit API.
+This sample demostrated how to create a window family using Design Automation for Revit API **V3**.
 
 # Thumbnail
 ![thumbnail](/public/res/screenshot.png)
@@ -23,7 +23,14 @@ This sample demostrated how to create a window family using Design Automation fo
 # Live Demo
 [https://familycreationsample.herokuapp.com/](https://familycreationsample.herokuapp.com/)
 
-# Setup
+# Main Parts of The Work
+1. Migrate the existing Revit WindowWizard Plugin to be used within AppBundle of Design Automation for Revit. Please check //CreateWindow/PlugIn 
+
+2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under //CreateWindow/Postman Collection
+
+3. Create the Web App to call the workitem.
+
+# Web App Setup
 
 ## Prerequisites
 
@@ -91,25 +98,24 @@ Open the browser: [http://localhost:3000](http://localhost:3000).
 
 The [Autodesk Forge](https://www.npmjs.com/package/forge-apis) packages is included by default. Some other non-Autodesk packaged are used, including [express](https://www.npmjs.com/package/express) and [multer](https://www.npmjs.com/package/multer) for upload.
 
-# Further Reading
+## Further Reading
 
 Documentation:
 
 - [Design Automation API](https://forge.autodesk.com/en/docs/design-automation/v3/developers_guide/overview/)
 - [BIM 360 API](https://developer.autodesk.com/en/docs/bim360/v1/overview/) and [App Provisioning](https://forge.autodesk.com/blog/bim-360-docs-provisioning-forge-apps)
 - [Data Management API](https://developer.autodesk.com/en/docs/data/v2/overview/)
-- [Viewer](https://developer.autodesk.com/en/docs/viewer/v6)
 
-### Tips & Tricks
-- **/api/forge/da4revit/callback**, the endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+## Tips & Tricks
+ **/api/forge/da4revit/callback**, the endpoint is a webhook that would be invoked by the Design Automation API, you need to use ngrok to configure your Local Server for testing, please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
 
-### Troubleshooting
+## Troubleshooting
 
 After installing Github desktop for Windows, on the Git Shell, if you see a ***error setting certificate verify locations*** error, use the following:
 
     git config --global http.sslverify "false"
 
-### Limitation
+## Limitation
 - The Window family template which is used to create the family should be uploaded first.
 
 ## License

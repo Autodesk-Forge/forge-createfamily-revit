@@ -64,7 +64,7 @@ router.use(async (req, res, next) => {
 /////////////////////////////////////////////////////////////////////
 // Endpoint to create a new Revit family
 /////////////////////////////////////////////////////////////////////
-router.post('/da4revit/v1/families', async(req, res, next)=>{
+router.post('/da4revit/v1/families', async(req, res)=>{
     const params             = req.body.Params;
     const destinateFolderUrl = req.body.TargetFolder;
 
@@ -156,7 +156,7 @@ router.post('/da4revit/v1/families', async(req, res, next)=>{
 });
 
 
-router.delete('/da4revit/v1/families/:family_workitem_id', async(req, res, next) =>{
+router.delete('/da4revit/v1/families/:family_workitem_id', async(req, res) =>{
 
     const workitemId = req.params.family_workitem_id;
     try {
@@ -188,7 +188,7 @@ router.delete('/da4revit/v1/families/:family_workitem_id', async(req, res, next)
     }
 })
 
-router.get('/da4revit/v1/families/:family_workitem_id', async(req, res, next) => {
+router.get('/da4revit/v1/families/:family_workitem_id', async(req, res) => {
     const workitemId = (req.params.family_workitem_id);
     try {
         const oauth = new OAuth(req.session);
@@ -202,7 +202,7 @@ router.get('/da4revit/v1/families/:family_workitem_id', async(req, res, next) =>
 })
 
 
-router.post('/da4revit/callback', async (req, res, next) => {
+router.post('/da4revit/callback', async (req, res) => {
     // Best practice is to tell immediately that you got the call
     // so return the HTTP call and proceed with the business logic
     res.status(202).end();

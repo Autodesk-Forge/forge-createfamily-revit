@@ -1,0 +1,2346 @@
+{
+	"info": {
+		"_postman_id": "f2b7e121-b65c-4e39-aea5-7a0e7e946ce8",
+		"name": "Design Automation V3 Samples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "EngineApi",
+			"item": [
+				{
+					"name": "List Engines",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4df5bb87-36c1-4031-bc37-4be229448457",
+								"type": "text/javascript",
+								"exec": [
+									"var body = JSON.parse(responseBody);",
+									"pm.environment.set(\"engine\", body[\"data\"][14]);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dasApiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{dasApiRoot}}/engines",
+							"host": [
+								"{{dasApiRoot}}"
+							],
+							"path": [
+								"engines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Engine",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e711f374-3220-4beb-a58f-0e50098bade5",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dasApiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{dasApiRoot}}/engines/{{engine}}",
+							"host": [
+								"{{dasApiRoot}}"
+							],
+							"path": [
+								"engines",
+								"{{engine}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nickname",
+			"item": [
+				{
+					"name": "Delete user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dasApiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"nickname\": \"{{dasNickName}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{dasApiRoot}}/forgeapps/me",
+							"host": [
+								"{{dasApiRoot}}"
+							],
+							"path": [
+								"forgeapps",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dasApiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{dasApiRoot}}/forgeapps/me",
+							"host": [
+								"{{dasApiRoot}}"
+							],
+							"path": [
+								"forgeapps",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create nickname",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{dasApiToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"nickname\": \"{{dasNickName}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{dasApiRoot}}/forgeapps/me",
+							"host": [
+								"{{dasApiRoot}}"
+							],
+							"path": [
+								"forgeapps",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Window Family Api",
+			"item": [
+				{
+					"name": "App",
+					"item": [
+						{
+							"name": "GET commands",
+							"item": [
+								{
+									"name": "Get list of apps",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get app aliases",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/aliases",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"aliases"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get app versions",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/versions",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"versions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get app versions details",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/versions/{{createWindowFamilyAppVersion}}",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"versions",
+												"{{createWindowFamilyAppVersion}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get app details",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "33cd700f-a5a3-49b5-bb39-ae502a9e9bbb",
+												"exec": [
+													"var body = JSON.parse(responseBody);",
+													"pm.environment.set(\"createWindowFamilyAppUrl\", body[\"package\"]);",
+													"",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/{{dasNickName}}.CreateWindowFamilyApp+dev",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"{{dasNickName}}.CreateWindowFamilyApp+dev"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get app aliases details",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/aliases/dev",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"aliases",
+												"dev"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Create",
+							"item": [
+								{
+									"name": "Create app",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "e4e018d4-0112-48a6-9ccf-61c5d23b79d5",
+												"exec": [
+													"var body = JSON.parse(responseBody);",
+													"pm.environment.set(\"createWindowFamilyAppUrl\", body[\"uploadParameters\"][\"endpointURL\"]);",
+													"pm.environment.set(\"createWindowFamilyAppVersion\", body[\"version\"]);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"id\": \"CreateWindowFamilyApp\",\r\n\t\"engine\": \"Autodesk.Revit+2019\",\r\n\t\"description\": \"Create Window Family app based on Revit 2019\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Upload app to Design Automation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Cache-Control",
+												"value": "no-cache"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "key",
+													"value": "apps/revitiosamplebyzhong/CreateWindowFamilyApp/1",
+													"type": "text"
+												},
+												{
+													"key": "content-type",
+													"value": "application/octet-stream",
+													"type": "text"
+												},
+												{
+													"key": "policy",
+													"value": "eyJleHBpcmF0aW9uIjoiMjAxOS0wMS0yMVQxMDowMDozMi4xNDg1NTg3WiIsImNvbmRpdGlvbnMiOlt7ImtleSI6ImFwcHMvcmV2aXRpb3NhbXBsZWJ5emhvbmcvQ3JlYXRlV2luZG93RmFtaWx5QXBwLzEifSx7ImJ1Y2tldCI6ImRhc3Byb2Qtc3RvcmUifSx7InN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyI6IjIwMCJ9LFsic3RhcnRzLXdpdGgiLCIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCIiXSxbInN0YXJ0cy13aXRoIiwiJGNvbnRlbnQtVHlwZSIsImFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbSJdLHsieC1hbXotc2VydmVyLXNpZGUtZW5jcnlwdGlvbiI6IkFFUzI1NiJ9LFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCIwIiwiMTA0ODU3NjAwIl0seyJ4LWFtei1jcmVkZW50aWFsIjoiQVNJQVRHVkpaS00zRU80U0NONUEvMjAxOTAxMjEvdXMtZWFzdC0xL3MzL2F3czRfcmVxdWVzdC8ifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE5MDEyMVQwOTAwMzJaIn0seyJ4LWFtei1zZWN1cml0eS10b2tlbiI6IkZRb0daWEl2WVhkekVGSWFESTlYWGJvTVA4OWpIaDV3dFNMOUFlVjVjZjd3R3Q5bGpjcUlrT08vUWdRZzBBdGZUMzVHNzlUU1BtNjBsd1NYVG85dWgvOXdpQkFjc1Y0d0g4cDdUait6M1daOXNObjgyMXhvV280eUJQK0RsSGZ5ZUoyZFJ4UkVoVFc4UmFWckFXZW44ZzFrWXpEK0F2ZGdTc0VNYWF0UC9ocjQ3U3NHRm9XMVpzbk5nZk80cDZNSVBxQWN6dTg4aWF5akRDbnE0dFoveWxXWUxpNzB5TmhQR1NTQmtzNUR6OURJZ2htc3JIQi9GRm9LUWVXMjUvOThqUThnSlhuUUZ0cVQyV2FpVS84MVF5OHYrVnVJNVJOVG4zN2dyVTNkUXdaWTJ0NEJjTFhRK0ZlVDVPc25ZamQwZlZqbyt6d2doUmZTdWd2TmY5ZVFxU1h2dlFkUVNTQXVRM2h5Wkc4ZVIxQnRCU2pHMVhNTXBQZ280WW1XNGdVPSJ9XX0=",
+													"type": "text"
+												},
+												{
+													"key": "success_action_status",
+													"value": "200",
+													"type": "text"
+												},
+												{
+													"key": "success_action_redirect",
+													"value": "null",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-signature",
+													"value": "eb04be22c66530ad7bc34f640b617201fa106968bbb6cf50c1e38727a4631a20",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-credential",
+													"value": "ASIATGVJZKM3EO4SCN5A/20190121/us-east-1/s3/aws4_request/",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-algorithm",
+													"value": "AWS4-HMAC-SHA256",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-date",
+													"value": "20190121T090032Z",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-server-side-encryption",
+													"value": "AES256",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-security-token",
+													"value": "FQoGZXIvYXdzEFIaDI9XXboMP89jHh5wtSL9AeV5cf7wGt9ljcqIkOO/QgQg0AtfT35G79TSPm60lwSXTo9uh/9wiBAcsV4wH8p7Tj+z3WZ9sNn821xoWo4yBP+DlHfyeJ2dRxREhTW8RaVrAWen8g1kYzD+AvdgSsEMaatP/hr47SsGFoW1ZsnNgfO4p6MIPqAczu88iayjDCnq4tZ/ylWYLi70yNhPGSSBks5Dz9DIghmsrHB/FFoKQeW25/98jQ8gJXnQFtqT2WaiU/81Qy8v+VuI5RNTn37grU3dQwZY2t4BcLXQ+FeT5OsnYjd0fVjo+zwghRfSugvNf9eQqSXvvQdQSSAuQ3hyZG8eR1BtBSjG1XMMpPgo4YmW4gU=",
+													"type": "text"
+												},
+												{
+													"key": "file",
+													"type": "file",
+													"src": ""
+												}
+											]
+										},
+										"url": {
+											"raw": "https://dasprod-store.s3.amazonaws.com",
+											"protocol": "https",
+											"host": [
+												"dasprod-store",
+												"s3",
+												"amazonaws",
+												"com"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create a new app alias",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"version\": {{createWindowFamilyAppVersion}},\r\n  \"id\": \"dev\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/aliases",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"aliases"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "a00e339e-1bc6-41c0-8fc3-6d40dc33a072",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "c913b30e-fc67-403b-84ba-a75127d4d29b",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Modify existing app",
+							"item": [
+								{
+									"name": "Create a new app version",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "c86fdb2d-a4f0-4629-a82b-2ff832fa79ce",
+												"exec": [
+													"var body = JSON.parse(responseBody);",
+													"pm.environment.set(\"createDoubleHungWindowFamilyAppUrl\", body[\"package\"]);",
+													"pm.environment.set(\"createDoubleHungWindowFamilyAppVersion\", body[\"version\"]);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"engine\": \"Autodesk.Revit+2019\",\r\n\t\"description\": \"Create Window Family App based on Revit 2019\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/versions",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"versions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Modify alias details",
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"version\": {{createWindowFamilyAppVersion}}\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateWindowFamilyApp/aliases/dev",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateWindowFamilyApp",
+												"aliases",
+												"dev"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Upload new version to Design Automation",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Cache-Control",
+												"value": "no-cache"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "key",
+													"value": "apps/revitiosample/CreateDoubleHungWindowFamilyApp/4",
+													"type": "text"
+												},
+												{
+													"key": "content-type",
+													"value": "application/octet-stream",
+													"type": "text"
+												},
+												{
+													"key": "policy",
+													"value": "eyJleHBpcmF0aW9uIjoiMjAxOC0xMS0wN1QwODowOTowNy4xOTg1MTg0WiIsImNvbmRpdGlvbnMiOlt7ImtleSI6ImFwcHMvcmV2aXRpb3NhbXBsZS9DcmVhdGVEb3VibGVIdW5nV2luZG93RmFtaWx5QXBwLzQifSx7ImJ1Y2tldCI6ImRhc3Byb2Qtc3RvcmUifSx7InN1Y2Nlc3NfYWN0aW9uX3N0YXR1cyI6IjIwMCJ9LFsic3RhcnRzLXdpdGgiLCIkc3VjY2Vzc19hY3Rpb25fcmVkaXJlY3QiLCIiXSxbInN0YXJ0cy13aXRoIiwiJGNvbnRlbnQtVHlwZSIsImFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbSJdLHsieC1hbXotc2VydmVyLXNpZGUtZW5jcnlwdGlvbiI6IkFFUzI1NiJ9LFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCIwIiwiMTA0ODU3NjAwIl0seyJ4LWFtei1jcmVkZW50aWFsIjoiQVNJQVRHVkpaS00zQ00zNlhHRlQvMjAxODExMDcvdXMtZWFzdC0xL3MzL2F3czRfcmVxdWVzdC8ifSx7IngtYW16LWFsZ29yaXRobSI6IkFXUzQtSE1BQy1TSEEyNTYifSx7IngtYW16LWRhdGUiOiIyMDE4MTEwN1QwNzA5MDdaIn0seyJ4LWFtei1zZWN1cml0eS10b2tlbiI6IkZRb0daWEl2WVhkekVFY2FERkdxOWxFamV0djVNbjlKbkNMOUFjZUxLMFk1c3hReVZwWjRkRUhFOCtYeDZxOE4rK0RrRm9aenR3NHptMGdoVW9qc0tTTlRaY3pISXRGcHZwdERocUhyenNhWXV5a0xxbzJEdWFUNlQyTGdCeFZGcm9EZ1B1SjBnemw2UU1CUmFNejFiQ2VNSzMwMXdVM3cyYjJ0MzdUbm9ua1llTTBCdEszRzNNQXpFaFlOSDgyNkJjNkVmc1A3aU4zM21Ceko4VFJOckQxeE9aZGt0ZkZRa3FjY0hwdW11WGdEVUkwS1FMSVhMT1JFTk1aY3Fpdncvclh6bGlnaDIwVGpVZDdNaFFhQkdJVGlmbFdqc3RzcldRSmtNTThKanFWa0l4T01LQm5yZkdmOEQvSE1oaVRZNC95enZ2aDRZSmd1NG4wdDBwN1BnZE8xTnBiUzg5cVVGSmdQZGFlOFQwSEFLOFpWTnZ1YXBIc29zZnFKM3dVPSJ9XX0=",
+													"type": "text"
+												},
+												{
+													"key": "success_action_status",
+													"value": "200",
+													"type": "text"
+												},
+												{
+													"key": "success_action_redirect",
+													"value": "null",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-signature",
+													"value": "8025c10c815683f475cfa6fddec64d3ae2b37195655baf99ecc401ea96a726bd",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-credential",
+													"value": "ASIATGVJZKM3CM36XGFT/20181107/us-east-1/s3/aws4_request/",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-algorithm",
+													"value": "AWS4-HMAC-SHA256",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-date",
+													"value": "20181107T070907Z",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-server-side-encryption",
+													"value": "AES256",
+													"type": "text"
+												},
+												{
+													"key": "x-amz-security-token",
+													"value": "FQoGZXIvYXdzEEcaDFGq9lEjetv5Mn9JnCL9AceLK0Y5sxQyVpZ4dEHE8+Xx6q8N++DkFoZztw4zm0ghUojsKSNTZczHItFpvptDhqHrzsaYuykLqo2DuaT6T2LgBxVFroDgPuJ0gzl6QMBRaMz1bCeMK301wU3w2b2t37TnonkYeM0BtK3G3MAzEhYNH826Bc6EfsP7iN33mBzJ8TRNrD1xOZdktfFQkqccHpumuXgDUI0KQLIXLORENMZcqivw/rXzligh20TjUd7MhQaBGITiflWjstsrWQJkMM8JjqVkIxOMKBnrfGf8D/HMhiTY4/yzvvh4YJgu4n0t0p7PgdO1NpbS89qUFJgPdae8T0HAK8ZVNvuapHsosfqJ3wU=",
+													"type": "text"
+												},
+												{
+													"key": "file",
+													"type": "file",
+													"src": ""
+												}
+											]
+										},
+										"url": {
+											"raw": "https://dasprod-store.s3.amazonaws.com",
+											"protocol": "https",
+											"host": [
+												"dasprod-store",
+												"s3",
+												"amazonaws",
+												"com"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "7d2740d1-cb0e-4a55-ac04-244ca5c7f7d0",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "0f620dfb-e333-45b6-af25-fcfb57101fd5",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "DELETE commands",
+							"item": [
+								{
+									"name": "Delete app version",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "f690c135-20b4-4003-8659-c35bec0784cd",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CountItApp/versions/{{fileUpgraderAppVersion}}",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CountItApp",
+												"versions",
+												"{{fileUpgraderAppVersion}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete app",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "a888e276-36fd-478d-85a0-33821043131c",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/CreateDoubleHungWindowFamilyApp",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"CreateDoubleHungWindowFamilyApp"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete app alias",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "b57caa2d-870a-416d-8c42-bc3528ec3503",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/appbundles/FileUpgraderApp/aliases/test",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"appbundles",
+												"FileUpgraderApp",
+												"aliases",
+												"test"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Activity",
+					"item": [
+						{
+							"name": "GET commands",
+							"item": [
+								{
+									"name": "Get list of activities",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get activity version details",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateDoubleHungWindowFamilyActivity/versions/{{createDoubleHungWindowFamilyActivityVersion}}",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateDoubleHungWindowFamilyActivity",
+												"versions",
+												"{{createDoubleHungWindowFamilyActivityVersion}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get activity details",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/{{dasNickName}}.CreateWindowFamilyActivity+prod",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"{{dasNickName}}.CreateWindowFamilyActivity+prod"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get activity aliases details",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateDoubleHungWindowFamilyActivity/aliases/test",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateDoubleHungWindowFamilyActivity",
+												"aliases",
+												"test"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get activity versions",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateDoubleHungWindowFamilyActivity/versions",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateDoubleHungWindowFamilyActivity",
+												"versions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get activity aliases",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateWindowFamilyActivity/aliases",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateWindowFamilyActivity",
+												"aliases"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Create",
+							"item": [
+								{
+									"name": "Create activity",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "81b7da19-decc-40d8-9c79-294dd71cffa3",
+												"exec": [
+													"var body = JSON.parse(responseBody);",
+													"pm.environment.set(\"createWindowFamilyActivityVersion\", body[\"version\"]);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"id\": \"CreateWindowFamilyActivity\",\r\n\r\n\r\n\t\"commandLine\": [ \"$(engine.path)\\\\\\\\revitcoreconsole.exe /i $(args[templateFile].path) /al $(appbundles[CreateWindowFamilyApp].path)\" ],\r\n\t\"parameters\": {\r\n\t  \"templateFile\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"get\",\r\n\t\t\"description\": \"Input Revit Window Family Templete\",\r\n\t\t\"required\": true\r\n\t  },\r\n\t  \"windowParams\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"get\",\r\n\t\t\"description\": \"Window Family parameters\",\r\n\t\t\"required\": false,\r\n\t\t\"localName\": \"WindowParams.json\"\r\n\t  },\r\n\t  \"resultFamily\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"put\",\r\n\t\t\"description\": \"new created Winodw Family\",\r\n\t\t\"required\": true,\r\n\t\t\"localName\": \"WindowFamily.rfa\"\r\n\t  }\r\n\t},\r\n\t\"engine\": \"Autodesk.Revit+2019\",\r\n\t\"appbundles\": [ \"{{dasNickName}}.CreateWindowFamilyApp+dev\" ],\r\n\t\"description\": \"Create Window Family Activity.\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create activity alias",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": \"prod\",\r\n    \"version\": {{createWindowFamilyActivityVersion}}\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateWindowFamilyActivity/aliases",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateWindowFamilyActivity",
+												"aliases"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c85bae28-5b3b-44ce-b2bc-b2966ac94b6f",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "43045e4a-b6ed-41ba-b80f-3cc41a55738a",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "DELETE commands",
+							"item": [
+								{
+									"name": "Delete activity",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0bf87f3f-0d23-46b1-82cf-79c821285114",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateDoubleHungWindowFamilyActivity",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateDoubleHungWindowFamilyActivity"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete activity version",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "42489332-f896-4c85-8e08-2718a14a16a2",
+												"type": "text/javascript",
+												"exec": [
+													""
+												]
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CountItActivity/versions/{{countItActivityVersion}}",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CountItActivity",
+												"versions",
+												"{{countItActivityVersion}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete activity alias",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "0bf87f3f-0d23-46b1-82cf-79c821285114",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateDoubleHungWindowFamilyActivity/aliases/test",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateDoubleHungWindowFamilyActivity",
+												"aliases",
+												"test"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "Modify existing activity",
+							"item": [
+								{
+									"name": "Create new activity version",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"id": "920e6666-ec9b-41a3-afd8-e769f4ce6a8c",
+												"exec": [
+													"var body = JSON.parse(responseBody);",
+													"pm.environment.set(\"createWindowFamilyActivityVersion\", body[\"version\"]);",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"commandLine\": [ \"$(engine.path)\\\\\\\\revitcoreconsole.exe /i $(args[templateFile].path) /al $(appbundles[CreateWindowFamilyApp].path)\" ],\r\n\t\"parameters\": {\r\n\t  \"templateFile\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"get\",\r\n\t\t\"description\": \"Input Revit template file\",\r\n\t\t\"required\": true\r\n\t  },\r\n\t  \"windowParams\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"get\",\r\n\t\t\"description\": \"Window Family parameters\",\r\n\t\t\"required\": false,\r\n\t\t\"localName\": \"WindowParams.json\"\r\n\t  },\t  \r\n\t  \"resultFamily\": {\r\n\t\t\"zip\": false,\r\n\t\t\"ondemand\": false,\r\n\t\t\"verb\": \"put\",\r\n\t\t\"description\": \"new created revit family file\",\r\n\t\t\"required\": true,\r\n\t\t\"localName\": \"WindowFamily.rfa\"\r\n\t  }\r\n\t},\r\n\t\"engine\": \"Autodesk.Revit+2019\",\r\n\t\"appbundles\": [ \"{{dasNickName}}.CreateWindowFamilyApp+prod\" ],\r\n\t\"description\": \"Create Window Family.\"\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateWindowFamilyActivity/versions",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateWindowFamilyActivity",
+												"versions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Modify activity alias details",
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "",
+												"value": "",
+												"disabled": true
+											},
+											{
+												"key": "Authorization",
+												"value": "Bearer {{dasApiToken}}"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n  \"version\": {{createWindowFamilyActivityVersion}}\r\n}"
+										},
+										"url": {
+											"raw": "{{dasApiRoot}}/activities/CreateWindowFamilyActivity/aliases/dev",
+											"host": [
+												"{{dasApiRoot}}"
+											],
+											"path": [
+												"activities",
+												"CreateWindowFamilyActivity",
+												"aliases",
+												"dev"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "74f12822-a05d-4f64-a40c-47ebceb2fde5",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "5f4f5c1f-b39d-4005-8622-e21e12086d7d",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"_postman_isSubFolder": true
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Workitem",
+					"item": [
+						{
+							"name": "Send Workitem",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "60c34afe-ea9f-4726-acce-414e545ba99a",
+										"exec": [
+											"var body = JSON.parse(responseBody);",
+											"pm.environment.set(\"createWindowFamilyWorkitemId\", body[\"id\"]);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": false
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dasApiToken}}",
+										"disabled": false
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"activityId\":\"{{dasNickName}}.CreateWindowFamilyActivity+dev\",\n    \"arguments\":{\n        \"templateFile\":{\n            \"url\":\"https://developer.api.autodesk.com/oss/v2/buckets/revitiosamplebyzhong/objects/windowFamily.rft\",\n\t          \"Headers\":{\n\t            \"Authorization\":\"Bearer {{dataApiToken}}\"\n\t        }\n        },\n        \"windowParams\":{\n            \"url\":\"data:application/json,{ 'Types': [{'TypeName': 'My Type', 'WindowHeight': 6, 'WindowWidth': 3, 'WindowInset':0.05, 'WindowSillHeight':3},{'TypeName': 'My New Type', 'WindowHeight': 8, 'WindowWidth': 6, 'WindowInset':0.1, 'WindowSillHeight':6}], 'GlassPaneMaterial': 'Glass', 'SashMaterial': 'Maple', 'WindowStyle':'DoubleHungWindow'}\"\n            },\n        \n        \"resultFamily\":{\n            \"verb\":\"put\",\n            \"url\":\"{{createWindowFamilyResultUrl}}\",\n            \"Headers\":{\n\t            \"Authorization\":\"Bearer {{dataApiToken}}\"\n            }\n\n        }\n    }\n}"
+								},
+								"url": {
+									"raw": "{{dasApiRoot}}/workitems",
+									"host": [
+										"{{dasApiRoot}}"
+									],
+									"path": [
+										"workitems"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancel Workitem",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dasApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{dasApiRoot}}/workitems/{{createWindowFamilyWorkitemId}}",
+									"host": [
+										"{{dasApiRoot}}"
+									],
+									"path": [
+										"workitems",
+										"{{createWindowFamilyWorkitemId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Workitem status",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dasApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{dasApiRoot}}/workitems/{{createWindowFamilyWorkitemId}}",
+									"host": [
+										"{{dasApiRoot}}"
+									],
+									"path": [
+										"workitems",
+										"{{createWindowFamilyWorkitemId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7dc75d62-f83b-42cb-ace9-605c1fa146c2",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "11543936-40d8-47e3-b21d-2391d3214e16",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Data Helper API",
+			"item": [
+				{
+					"name": "Authenticate",
+					"item": [
+						{
+							"name": "New token for Data API",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a71542d4-3c80-4ba4-af28-ad9d74406c91",
+										"type": "text/javascript",
+										"exec": [
+											"var body = JSON.parse(responseBody);",
+											"pm.environment.set(\"dataApiToken\", body[\"access_token\"]);",
+											"",
+											"var bucketKey = pm.environment.get(\"dasNickName\").toLowerCase();",
+											"pm.environment.set(\"bucketKey\", bucketKey);",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "client_id",
+											"value": "{{client_id}}",
+											"type": "text"
+										},
+										{
+											"key": "client_secret",
+											"value": "{{client_secret}}",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "client_credentials",
+											"type": "text"
+										},
+										{
+											"key": "scope",
+											"value": "bucket:read bucket:update bucket:create bucket:delete data:write data:create data:read",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/authentication/v1/authenticate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"authentication",
+										"v1",
+										"authenticate"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Bucket",
+					"item": [
+						{
+							"name": "Create Bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4579fac2-2274-4de2-b84c-76d093c59bd8",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bucketKey\": \"{{bucketKey}}\",\r\n    \"policyKey\": \"transient\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get bucket details",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4579fac2-2274-4de2-b84c-76d093c59bd8",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/details",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"details"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get objects in a bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f0586fdc-689e-414b-a469-5b428c52b995",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/objects",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "DELETE Data",
+					"item": [
+						{
+							"name": "Delete DA result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8bd53c19-13b6-4810-ab72-72e826cd7625",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9fa205f9-6d48-4430-9609-ca833ff4e8ae",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/objects/FileUpgrader.rvt",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"FileUpgrader.rvt"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete bucket",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8bd53c19-13b6-4810-ab72-72e826cd7625",
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "475fe110-53a8-4c91-a99d-7fef685ef94c",
+										"type": "text/javascript",
+										"exec": [
+											"var bucketKey = pm.environment.get(\"dasNickName\").toLowerCase();",
+											"pm.environment.set(\"bucketKey\", bucketKey);",
+											""
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "CreateWindowFamilyData",
+					"item": [
+						{
+							"name": "Create signed URL with write access",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a51a22b3-9614-4b93-949f-543ed399964d",
+										"exec": [
+											"var body = JSON.parse(responseBody);",
+											"pm.environment.set(\"createWindowFamilyResultUrl\", body[\"signedUrl\"]);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9fa205f9-6d48-4430-9609-ca833ff4e8ae",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/objects/windowFamily.rfa/signed?access=readwrite",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"windowFamily.rfa",
+										"signed"
+									],
+									"query": [
+										{
+											"key": "access",
+											"value": "readwrite"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download result",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c69d77e5-bb7f-4c4e-9f83-ad6e1f357ed6",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "9fa205f9-6d48-4430-9609-ca833ff4e8ae",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/objects/windowFamily.rfa",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"windowFamily.rfa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create empty output object",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5b993251-5b30-4bab-bc41-2f15cc54d56e",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "3fb6c434-efa2-4fed-bc11-a7926e3e70ab",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/octet-stream"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{dataApiToken}}"
+									}
+								],
+								"body": {
+									"mode": "file",
+									"file": {}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/oss/v2/buckets/{{bucketKey}}/objects/windowFamily.rft",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"oss",
+										"v2",
+										"buckets",
+										"{{bucketKey}}",
+										"objects",
+										"windowFamily.rft"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "82de90ad-72e0-45d9-bf06-3a8d8e98a515",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9677fa19-ccaf-433e-97f2-57fcb0baf72b",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "063ca655-0ba8-4655-9065-a9e867825bb7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "2abd4cee-9729-4c81-a804-eb5997634c54",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "New token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var body = JSON.parse(responseBody);",
+							"pm.environment.set(\"dasApiToken\", body[\"access_token\"]);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "code:all",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/authentication/v1/authenticate",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"authentication",
+						"v1",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
