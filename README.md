@@ -77,24 +77,25 @@ Open the browser: [http://localhost:3000](http://localhost:3000).
 
 ## Main Backend API used
 ### File upgrade API based on Design Automation API
-- POST      /api/forge/da4revit/v1/families
-- GET       /api/forge/da4revit/v1/families/:family_workitem_id
-- DELETE    /api/forge/da4revit/v1/families/:family_workitem_id
-- POST      /api/forge/da4revit/callback
+- **POST      /api/forge/da4revit/v1/families**
+- **GET       /api/forge/da4revit/v1/families/:family_workitem_id**
+- **DELETE    /api/forge/da4revit/v1/families/:family_workitem_id**
+- **POST      /api/forge/da4revit/callback**
 
 ### File/Folder operation API based on Data Management API
-- POST      /api/forge/datamanagement/v1/folder
-- DELETE    /api/forge/datamanagement/v1/folder/:folder_url
-- GET       /api/forge/datamanagement/v1
+- **POST      /api/forge/datamanagement/v1/folder**
+- **DELETE    /api/forge//datamanagement/v1/folder/:folder_url**
+- **GET       /api/forge/datamanagement/v1**
 
 ### User information API
-- GET       /api/forge/user/v1/profile
+- **GET       /api/forge/user/v1/profile**
 
 ### OAuth information API
-- GET       /api/forge/oauth/v1/url
-- GET       /api/forge/oauth/v1/signout
-- GET       /api/forge/oauth/v1/token
-- GET      /api/forge/callback/oauth
+- **GET       /api/forge/oauth/v1/url**
+- **GET       /api/forge/oauth/v1/signout**
+- **GET       /api/forge/oauth/v1/token**
+- **GET       /api/forge/oauth/v1/clientid**
+- **GET       /api/forge/callback/oauth**
 
 
 ## Packages used

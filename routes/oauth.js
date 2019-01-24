@@ -34,6 +34,11 @@ router.get('/callback/oauth', async (req, res, next) => {
     }
 });
 
+
+router.get('/oauth/v1/clientid', (req, res) =>{
+    res.status(200).end( JSON.stringify({id : config.credentials.client_id}) );
+});
+
 router.get('/oauth/v1/url', (req, res) => {
     const url =
         'https://developer.api.autodesk.com' +
