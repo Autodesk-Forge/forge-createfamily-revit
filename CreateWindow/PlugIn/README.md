@@ -5,7 +5,7 @@
 This sample demostrated how to migrate the Revit WindowWizard Plugin to be used within AppBundle of Design Automation for Revit.
 
 # Migration Steps
-Here is the main steps to migrate the Revit addin, before read the detail steps, please make sure you go through the official [Conver Addin Doc](https://github.com/Developer-Autodesk/design-automation-for-revit/blob/master/Docs/ConvertAddin.md) and understand the framework.
+Here is the main steps to migrate the Revit addin, before read the detail steps, please make sure you go through the official [Convert Addin Doc](https://forge.autodesk.com/en/docs/design-automation/v3/tutorials/revit/step1-convert-addin/) and understand the framework.
 
 ## Before we start: 
 - Build the WindowWizard project under \\Revit 2019 SDK\Samples\FamilyCreation\WindowWizard\CS\, load it into Revit to make sure it works good.
@@ -29,7 +29,7 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
 - In **DoubleHungWinCreation.cs**, use Application to replace UIApplication, and update the all the referenced place.
 
 ## Let's make it work as AppBundle of Design Automation for Revit
-- Add reference to DesignAutomationBridge.dll(please download it [here](https://github.com/Developer-Autodesk/design-automation-for-revit/blob/master/Docs/ConvertAddin.md) if you don't have), remove the command class, create the new class **CreateWindowApp** from **IExternalDBApplication**, also add a helper class **RuntimeValue** to switch between local and cloud, the code should look like: 
+- Add reference to DesignAutomationBridge.dll(please download at [Nuget](https://www.nuget.org/packages/Autodesk.Forge.DesignAutomation)), remove the command class, create the new class **CreateWindowApp** from **IExternalDBApplication**, also add a helper class **RuntimeValue** to switch between local and cloud, the code should look like: 
 ```   
     internal class RuntimeValue
     {
