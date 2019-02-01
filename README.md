@@ -77,12 +77,12 @@ Windows (use **Node.js command line** from Start menu)
     npm start
 
 ### ngrok
-Run ngrok http 3000 to create a tunnel to your local machine, then copy the address into the FORGE_WORK_ITEM_CALLBACK_URL environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+Run `ngrok http 3000` to create a tunnel to your local machine, then copy the address into the `FORGE_WORK_ITEM_CALLBACK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
 
 ### Start the app
 Open the browser: [http://localhost:3000](http://localhost:3000), the way to create a window family should be straightforwd, just follow the steps:
-1. Select window style, either Double Hung, Fixed, or Sliding Double
-2. Add a couple of family types, and change the parameters accordingly, set the material for Glass Pane and Sash, and change the family file name if necessary
+1. Select window style, either `Double Hung`, `Fixed`, or `Sliding Double`
+2. Add a couple of family types, and change the parameters accordingly, set the material for `Glass Pane` and `Sash`, and change the family file name if necessary
 3. Select a folder in your BIM360 project, the new created family file will be saved there
 4. Click the Create button, and see the result in BIM360
 
