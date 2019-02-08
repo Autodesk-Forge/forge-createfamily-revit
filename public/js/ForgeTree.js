@@ -254,6 +254,9 @@ const SOCKET_TOPIC_WORKITEM = 'Workitem-Notification';
 
 socketio = io();
 socketio.on(SOCKET_TOPIC_WORKITEM, (data)=>{
+  if(workingItem === null || data.WorkitemId !== workingItem)
+    return;
+    
   const status = data.Status.toLowerCase();
   updateStatus( status );
   

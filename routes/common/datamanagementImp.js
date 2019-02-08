@@ -101,26 +101,21 @@ function deleteFolder(projectId, folderId, access_token) {
 async function getHubs(oauthClient, credentials, res) {
     const hubs = new HubsApi();
     const data = await hubs.getHubs({}, oauthClient, credentials);
-    res.json(data.body.data.map((hub) => {
-        let hubType;
-        switch (hub.attributes.extension.type) {
-            case 'hubs:autodesk.core:Hub':
-                hubType = 'hubs';
-                break;
-            case 'hubs:autodesk.a360:PersonalHub':
-                hubType = 'personalHub';
-                break;
-            case 'hubs:autodesk.bim360:Account':
-                hubType = 'bim360Hubs';
-                break;
-        }
-        return createTreeNode(
-            hub.links.self.href,
-            hub.attributes.name,
-            hubType,
-            true
-        );
-    }));
+    const treeNodes = data.body.data.map((hub) => {
+        if( hub.attributes.extension.type === 'hubs:autodesk.bim360:Account'){
+            const hubType = 'bim360Hubs';
+            return createTreeNode(
+                hub.links.self.href,
+                hub.attributes.name,
+                hubType,
+                true
+            );
+        }else
+            return null;
+        });
+    // Only BIM360 hubs are supported for now
+    res.json(treeNodes.filter(node => node !== null));
+
 }
 
 async function getProjects(hubId, oauthClient, credentials, res) {
