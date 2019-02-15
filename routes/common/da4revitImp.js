@@ -251,7 +251,7 @@ function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, create
                     },
                     onComplete: {
                         verb: "post",
-                        url: designAutomation.callback_DA_Url
+                        url: designAutomation.revit_IO_WebHook_Url
                     }
                 }
         };    

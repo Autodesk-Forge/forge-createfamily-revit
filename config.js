@@ -35,14 +35,12 @@ module.exports = {
         public: ['viewables:read']
     },
     designAutomation:{
-        callback_DA_Url: process.env.FORGE_WORK_ITEM_CALLBACK_URL,
         // Window family template, please change to your template URL
-        revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosample/objects/myWindowFamily.rft',
+        revit_family_template : 'https://developer.api.autodesk.com/oss/v2/buckets/revitiosamplebyzhong/objects/myWindowFamily.rft',
         revit_IO_Endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
-        revit_IO_Nick_Name: 'revitiosample',
-        revit_IO_App_Name: 'CreateWindowFamilyApp+prod',
-        revit_IO_Activity_Name: 'CreateWindowFamilyActivity+prod',
-        bim360_Item_Type : 'items:autodesk.bim360:File',
-        bim360_Version_Type : 'versions:autodesk.bim360:File'
+        revit_IO_WebHook_Url:   process.env.FORGE_WEBHOOK_URL,
+        revit_IO_Nick_Name:     process.env.REVIT_IO_NICK_NAME,
+        revit_IO_App_Name:      process.env.REVIT_IO_APP_NAME,
+        revit_IO_Activity_Name: process.env.REVIT_IO_ACTIVITY_NAME
     }
 };

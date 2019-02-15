@@ -64,7 +64,10 @@ Mac OSX/Linux (Terminal)
     export FORGE_CLIENT_ID=<<YOUR CLIENT ID FROM DEVELOPER PORTAL>>
     export FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
     export FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
-    export FORGE_WORK_ITEM_CALLBACK_URL=<<YOUR WORKITEM CALLBACK URL>>
+    export FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
+    export REVIT_IO_NICK_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
+    export REVIT_IO_APP_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT APP NAME>>
+    export REVIT_IO_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
     npm start
 
 Windows (use **Node.js command line** from Start menu)
@@ -73,11 +76,14 @@ Windows (use **Node.js command line** from Start menu)
     set FORGE_CLIENT_ID=<<YOUR CLIENT ID FROM DEVELOPER PORTAL>>
     set FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
     set FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
-    set FORGE_WORK_ITEM_CALLBACK_URL=<<YOUR WORKITEM CALLBACK URL>>
+    set FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
+    set REVIT_IO_NICK_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
+    set REVIT_IO_APP_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT APP NAME>>
+    set REVIT_IO_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
     npm start
 
 ### ngrok
-Run `ngrok http 3000` to create a tunnel to your local machine, then copy the address into the `FORGE_WORK_ITEM_CALLBACK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
+Run `ngrok http 3000` to create a tunnel to your local machine, then copy the address into the `FORGE_WEBHOOK_URL` environment variable. Please check [WebHooks](https://forge.autodesk.com/en/docs/webhooks/v1/tutorials/configuring-your-server/) for details. 
 
 ### Start the app
 Open the browser: [http://localhost:3000](http://localhost:3000), the way to create a window family should be straightforwd, just follow the steps:
@@ -92,7 +98,7 @@ Open the browser: [http://localhost:3000](http://localhost:3000), the way to cre
 - POST      /api/forge/da4revit/v1/families
 - GET       /api/forge/da4revit/v1/families/:family_workitem_id
 - DELETE    /api/forge/da4revit/v1/families/:family_workitem_id
-- POST      /api/forge/da4revit/callback
+- POST      /api/forge/callback/designautomation
 
 ### File/Folder operation API based on Data Management API at **routes/datamanagement.js**
 - POST      /api/forge/datamanagement/v1/folder

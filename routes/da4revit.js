@@ -101,7 +101,9 @@ router.post('/da4revit/v1/families', async(req, res)=>{
         }
         const outputUrl = storageInfo.StorageUrl;
 
-        const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, designAutomation.bim360_Item_Type, designAutomation.bim360_Version_Type);
+        const bim360_Item_Type = 'items:autodesk.bim360:File';
+        const bim360_Version_Type = 'versions:autodesk.bim360:File';
+        const createFirstVersionBody = createBodyOfPostItem(params.FileName, destinateFolderId, storageInfo.StorageId, bim360_Item_Type, bim360_Version_Type);
         if (createFirstVersionBody === null) {
             console.log('failed to create body of Post Item');
             res.status(500).end('failed to create body of Post Item');
@@ -202,7 +204,7 @@ router.get('/da4revit/v1/families/:family_workitem_id', async(req, res) => {
 })
 
 
-router.post('/da4revit/callback', async (req, res) => {
+router.post('/callback/designautomation', async (req, res) => {
     // Best practice is to tell immediately that you got the call
     // so return the HTTP call and proceed with the business logic
     res.status(202).end();
