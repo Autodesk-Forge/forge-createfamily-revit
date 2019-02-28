@@ -5,7 +5,7 @@
 Postman collection to create App, define activity, and call the WorkItem. 
 
 ## Setup
-`Before start with Design Automaiton workflow, I strongly recommend you to read throught all the details at` [Design Automation for Revit Documenation](https://github.com/Developer-Autodesk/design-automation-for-revit),` and check the following steps if you already have basic understanding.`
+`Before start with Design Automaiton workflow, I strongly recommend you to read throught all the details at` [Design Automation for Revit Documenation](https://forge.autodesk.com/en/docs/design-automation/v3/tutorials/revit/),` and check the following steps if you already have basic understanding.`
 
 1. Download or update Postman from [here](https://www.getpostman.com/apps).
 
@@ -17,7 +17,7 @@ Postman collection to create App, define activity, and call the WorkItem.
 
 5. Select the environment and enter your [Forge App's](https://developer.autodesk.com/myapps) `Client ID` and `Client Secret`. This is used for authentication. In the environment variables give your app an easy to manage unique nickname.
 
-6. Compile and package the sample applications as noted [here](https://github.com/Developer-Autodesk/design-automation-for-revit/blob/master/Docs/AppBundle.md). You will need this to upload the app to Design Automation. Alternatively you may also download the packages from [CreateWindowApp.zip](../PlugIn/CreateWindowApp.zip).
+6. Compile and package the sample applications as noted [here](https://forge.autodesk.com/en/docs/design-automation/v3/tutorials/revit/step4-publish-appbundle/). You will need this to upload the app to Design Automation. Alternatively you may also download the packages from [CreateWindowApp.zip](../PlugIn/CreateWindowApp.zip).
 
 7. Create a nickname for your Forge App.
 
