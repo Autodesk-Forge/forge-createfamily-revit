@@ -359,40 +359,43 @@ function updateStatus( status){
   switch( status){
     case "started":
         setProgress(20);
-        statusText.innerHTML = "<h4>Submiting the job...</h4>"
+        statusText.innerHTML = "<h4>Step 1/4:  Uploading input parameters</h4>"
         // Disable Create and Cancel button
         upgradeBtnElm.disabled = true;
         cancelBtnElm.disabled = true;
         break;
     case "pending":
         setProgress(40);
-        statusText.innerHTML = "<h4>Processing by Design Automation Server...</h4>"
+        statusText.innerHTML = "<h4>Step 2/4: Running Design Automation</h4>"
+        upgradeBtnElm.disabled = true;
         cancelBtnElm.disabled = false;
         break;
     case "success":
-        setProgress(80);
-        statusText.innerHTML = "<h4>Creating 1st version in BIM360...</h4>"
+        setProgress(70);
+        statusText.innerHTML = "<h4>Step 3/4: Creating a new version</h4>"
+        upgradeBtnElm.disabled = true;
+        cancelBtnElm.disabled = true;
         break;
     case "completed":
         setProgress(100);
-        statusText.innerHTML = "<h4>Family is Created Successfully in BIM360!</h4>"
+        statusText.innerHTML = "<h4>Step 4/4: Done, Check in BIM360</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
-        cancelBtnElm.disabled = false;
+        cancelBtnElm.disabled = true;
         break;
     case "failed":
         setProgress(0);
-        statusText.innerHTML = "<h4>Failed to create the family:(</h4>"
+        statusText.innerHTML = "<h4>Failed to create the family</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
-        cancelBtnElm.disabled = false;
+        cancelBtnElm.disabled = true;
         break;
     case "cancelled":
         setProgress(0);
-        statusText.innerHTML = "<h4>The Job is cancelled!</h4>"
+        statusText.innerHTML = "<h4>The operation is cancelled!</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
-        cancelBtnElm.disabled = false;
+        cancelBtnElm.disabled = true;
         break;
   }
 }

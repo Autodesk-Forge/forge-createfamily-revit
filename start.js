@@ -47,13 +47,18 @@ app.use((err, req, res, next) => {
 
 // add socket connection
 var server = require('http').Server(app); 
-socketio = require('socket.io')(server);  
-socketio.on('connection', function(socket){
+// MyApp.SocketIo is a global object, will be used to send
+// status to the client
+global.MyApp = {
+    SocketIo : require('socket.io')(server)
+};
+global.MyApp.SocketIo.on('connection', function(socket){
     console.log('user connected to the socket');
 
     socket.on('disconnect', function(){
         console.log('user disconnected from the socket');
       });
 })
+
 
 server.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
