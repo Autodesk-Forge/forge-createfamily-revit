@@ -152,7 +152,7 @@ router.post('/da4revit/v1/families', async(req, res)=>{
         let workitemStatus = {
             'Status': "Failed"
         };
-        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         res.status(500).end(err);
     }
 });
@@ -183,7 +183,7 @@ router.delete('/da4revit/v1/families/:family_workitem_id', async(req, res) =>{
             'WorkitemId': workitemId,
             'Status': "Cancelled"
         };
-        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         res.status(204).end();
     } catch (err) {
         res.status(500).end("error");
@@ -224,7 +224,7 @@ router.post('/callback/designautomation', async (req, res) => {
         }
         let index = workitemList.indexOf(workitem);
         workitemStatus.Status = 'Success';
-        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         console.log("Post handle the workitem:  " + workitem.workitemId);        
         const type = workitem.createVersionData.data.type;
         try {
@@ -243,12 +243,12 @@ router.post('/callback/designautomation', async (req, res) => {
                 console.log('Successfully created a new version of the file');
                 workitemStatus.Status = 'Completed';
             }
-            global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+            global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
 
         } catch (err) {
             console.log(err);
             workitemStatus.Status = 'Failed';
-            global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+            global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         }
         finally{
             // Remove the workitem after it's done
@@ -257,7 +257,7 @@ router.post('/callback/designautomation', async (req, res) => {
     }else{
         // Report if not successful.
         workitemStatus.Status = 'Failed';
-        global.socketio.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
+        global.MyApp.SocketIo.emit(SOCKET_TOPIC_WORKITEM, workitemStatus);
         console.log(req.body);
     }
     return;
