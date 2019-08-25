@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage>
+  <Components Description="Create Window Family app">
+    <RuntimeRequirements OS="Win64"
+                         Platform="Revit"
+                         SeriesMin="R2019"
+                         SeriesMax="R2019" />
+    <ComponentEntry AppName="CreateWindowApp"
+                    Version="1.0.0"
+                    ModuleName="./Contents/CreateWindowApp.addin"
+                    AppDescription="Create Window Family App"
+                    LoadOnCommandInvocation="False"
+                    LoadOnRevitStartup="True" />
+  </Components>
+</ApplicationPackage>

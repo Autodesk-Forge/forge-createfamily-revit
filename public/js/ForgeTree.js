@@ -358,40 +358,40 @@ function updateStatus( status){
   let cancelBtnElm = document.getElementById('cancelBtn');
   switch( status){
     case "started":
-        setProgress(20);
+        setProgress(20, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>Step 1/4:  Uploading input parameters</h4>"
         // Disable Create and Cancel button
         upgradeBtnElm.disabled = true;
         cancelBtnElm.disabled = true;
         break;
     case "pending":
-        setProgress(40);
+        setProgress(40, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>Step 2/4: Running Design Automation</h4>"
         upgradeBtnElm.disabled = true;
         cancelBtnElm.disabled = false;
         break;
     case "success":
-        setProgress(70);
+        setProgress(70, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>Step 3/4: Creating a new version</h4>"
         upgradeBtnElm.disabled = true;
         cancelBtnElm.disabled = true;
         break;
     case "completed":
-        setProgress(100);
+        setProgress(100, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>Step 4/4: Done, Check in BIM360</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
         cancelBtnElm.disabled = true;
         break;
     case "failed":
-        setProgress(0);
+        setProgress(0, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>Failed to create the family</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
         cancelBtnElm.disabled = true;
         break;
     case "cancelled":
-        setProgress(0);
+        setProgress(0, 'familyCreationProgressBar');
         statusText.innerHTML = "<h4>The operation is cancelled!</h4>"
         // Enable Create and Cancel button
         upgradeBtnElm.disabled = false;
@@ -401,14 +401,13 @@ function updateStatus( status){
 }
 
 
-function setProgress( percent ){
-  let progressBar = document.getElementById('familyCreationProgressBar');
-  progressBar.style = "width: "+ percent + "%;";
-  if( percent == 100 ){
-    progressBar.parentElement.className = "progress progress-striped"
-  }else{
-    progressBar.parentElement.className = "progress progress-striped active"
-
+function setProgress(percent, progressbarId ) {
+  let progressBar = document.getElementById(progressbarId);
+  progressBar.style = "width: " + percent + "%;";
+  if (percent === 100) {
+      progressBar.parentElement.className = "progress progress-striped"
+  } else {
+      progressBar.parentElement.className = "progress progress-striped active"
   }
 }
 
