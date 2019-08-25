@@ -29,7 +29,7 @@ This sample demostrated how to create a window family using Design Automation fo
 # Main Parts of The Work
 1. Migrate the existing Revit WindowWizard Plugin to be used within AppBundle of Design Automation for Revit. Please check [PlugIn](./CreateWindow/PlugIn/) 
 
-2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under [Postman Collection](./CreateWindow/PostmanCollection/) 
+2. Create your App, upload the AppBundle, define your Activity and test the workitem with the Postman collection under [Postman Collection](./CreateWindow/PostmanCollection/), or you can refer ([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)) and simply use the `Configure` button in the Web Application to create the Appbundle & Activity.
 
 3. Create the Web App to call the workitem.
 
@@ -65,9 +65,9 @@ Mac OSX/Linux (Terminal)
     export FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
     export FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
     export FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
-    export REVIT_IO_NICK_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
-    export REVIT_IO_APP_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT APP NAME>>
-    export REVIT_IO_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    export DESIGN_AUTOMATION_NICKNAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
+    export DESIGN_AUTOMATION_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    export DESIGN_AUTOMATION_FAMILY_TEMPLATE=<<YOUR REVIT WINDOW FAMILY TEMPLATE FILE URL>>    
     npm start
 
 Windows (use **Node.js command line** from Start menu)
@@ -77,9 +77,9 @@ Windows (use **Node.js command line** from Start menu)
     set FORGE_CLIENT_SECRET=<<YOUR CLIENT SECRET>>
     set FORGE_CALLBACK_URL=<<YOUR CALLBACK URL>>
     set FORGE_WEBHOOK_URL=<<YOUR DESIGN AUTOMATION FOR REVIT CALLBACK URL>>
-    set REVIT_IO_NICK_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
-    set REVIT_IO_APP_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT APP NAME>>
-    set REVIT_IO_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    set DESIGN_AUTOMATION_NICKNAME=<<YOUR DESIGN AUTOMATION FOR REVIT NICK NAME>>
+    set DESIGN_AUTOMATION_ACTIVITY_NAME=<<YOUR DESIGN AUTOMATION FOR REVIT ACTIVITY NAME>>
+    set DESIGN_AUTOMATION_FAMILY_TEMPLATE=<<YOUR REVIT WINDOW FAMILY TEMPLATE FILE URL>>    
     npm start
 
 ### ngrok
@@ -92,28 +92,15 @@ Open the browser: [http://localhost:3000](http://localhost:3000), the way to cre
 3. Select a folder in your BIM360 project, the new created family file will be saved there
 4. Click the Create button, and see the result in BIM360
 
+`Note`: When you deploy the app, you have to open the `Configure` button to create the AppBundle & Activity before running the Export|Import feature, please check the video for the steps at [https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)
 
-## Main Backend API used
-### File upgrade API based on Design Automation API at **routes/da4revit.js**
-- POST      /api/forge/da4revit/v1/families
-- GET       /api/forge/da4revit/v1/families/:family_workitem_id
-- DELETE    /api/forge/da4revit/v1/families/:family_workitem_id
-- POST      /api/forge/callback/designautomation
+## Deployment
 
-### File/Folder operation API based on Data Management API at **routes/datamanagement.js**
-- POST      /api/forge/datamanagement/v1/folder
-- DELETE    /api/forge//datamanagement/v1/folder/:folder_url
-- GET       /api/forge/datamanagement/v1
+To deploy this application to Heroku, the **Callback URL** for Forge must use your `.herokuapp.com` address. After clicking on the button below, at the Heroku Create New App page, set your Client ID, Secret, Callback URL and Revit Design Automation variables for Forge.
 
-### User information API at **routes/user.js**
-- GET       /api/forge/user/v1/profile
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Autodesk-Forge/design.automation-nodejs-revit.window.family.create)
 
-### OAuth information API at **routes/oauth.js**
-- GET       /api/forge/oauth/v1/url
-- GET       /api/forge/oauth/v1/signout
-- GET       /api/forge/oauth/v1/token
-- GET       /api/forge/oauth/v1/clientid
-- GET       /api/forge/callback/oauth
+Watch [this video](https://www.youtube.com/watch?v=Oqa9O20Gj0c) as reference on how to deploy samples to Heroku.
 
 
 ## Packages used
@@ -134,6 +121,7 @@ Desktop APIs:
 
 ## Tips & Tricks
 - The Window family template which is used to create the family should be uploaded first.
+- Before using the sample to call the workitem, you need to setup your Appbundle & Activity of Design Automation, you can follow my Postman script to understand the whole process, or you can simply use the `Configure` button in the Web Application to create the Appbundle & Activity([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)). 
 
 ## Troubleshooting
 

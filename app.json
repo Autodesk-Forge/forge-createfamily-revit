@@ -1,0 +1,41 @@
+{
+    "name": "design.automation-nodejs-revit.window.family.create",
+    "description": "This sample demostrated how to create a window family using Design Automation for Revit API V3",
+    "repository": "https://github.com/Autodesk-Forge/design.automation-nodejs-revit.window.family.create",
+    "logo": "https://avatars0.githubusercontent.com/u/8017462?v=3&s=200",
+    "keywords": [
+        "autodesk",
+        "forge",
+        "design automation"        
+    ],
+    "env": {
+        "FORGE_CLIENT_ID": {
+            "description": "Forge Client ID"
+        },
+        "FORGE_CLIENT_SECRET": {
+            "description": "Forge Client Secret"
+        },
+        "FORGE_CALLBACK_URL": {
+            "description": "Callback URL of your Forge app, required for 3-legged OAuth",
+            "value": "https://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/forge/callback/oauth"
+        },
+        "FORGE_WEBHOOK_URL": {
+            "description": "Callback URL of your webhook",
+            "value": "http://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/forge/callback/designautomation"
+        },
+        "DESIGN_AUTOMATION_NICKNAME": {
+            "description": "Revit Design Automation NickName, FORGE_CLIENT_ID by default",
+            "value": "<<YOUR FORGE_CLIENT_ID HERE>>"
+        },
+        "DESIGN_AUTOMATION_ACTIVITY_NAME": {
+            "description": "Revit Design Automation Activity Name",
+            "value": "CreateWindowAppActivity+dev"
+        },
+        "DESIGN_AUTOMATION_FAMILY_TEMPLATE":{
+            "description": "Revit window family template, you can use the following for temp usage, or use your own if the following expired",
+            "value": "https://developer.api.autodesk.com/oss/v2/signedresources/2f4fe740-e6eb-4966-a657-06ef5ae13dfa?region=US"
+        }
+    },
+    "website": "https://developer.autodesk.com/",
+    "success_url": "/"
+}

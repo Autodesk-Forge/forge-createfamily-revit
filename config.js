@@ -35,11 +35,25 @@ module.exports = {
         public: ['viewables:read']
     },
     designAutomation:{
-        revit_IO_Endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
-        revit_family_template : process.env.REVIT_IO_FAMILY_TEMPLATE,
-        revit_IO_WebHook_Url:   process.env.FORGE_WEBHOOK_URL,
-        revit_IO_Nick_Name:     process.env.REVIT_IO_NICK_NAME,
-        revit_IO_App_Name:      process.env.REVIT_IO_APP_NAME,
-        revit_IO_Activity_Name: process.env.REVIT_IO_ACTIVITY_NAME
+        endpoint: 'https://developer.api.autodesk.com/da/us-east/v3/',
+        revit_family_template : process.env.DESIGN_AUTOMATION_FAMILY_TEMPLATE,
+        webhook_url: process.env.FORGE_WEBHOOK_URL,
+        nickname:     process.env.DESIGN_AUTOMATION_NICKNAME,
+        activity_name: process.env.DESIGN_AUTOMATION_ACTIVITY_NAME,
+        appbundle_activity_alias: 'dev',
+
+        URL:{
+            GET_ENGINES_URL:    "https://developer.api.autodesk.com/da/us-east/v3/engines",
+            ACTIVITIES_URL:     "https://developer.api.autodesk.com/da/us-east/v3/activities",
+            ACTIVITY_URL:       "https://developer.api.autodesk.com/da/us-east/v3/activities/{0}",
+            APPBUNDLES_URL:     "https://developer.api.autodesk.com/da/us-east/v3/appbundles",
+            APPBUNDLE_URL:      "https://developer.api.autodesk.com/da/us-east/v3/appbundles/{0}",
+
+            CREATE_APPBUNDLE_VERSION_URL: "https://developer.api.autodesk.com/da/us-east/v3/appbundles/{0}/versions",
+            CREATE_APPBUNDLE_ALIAS_URL:   "https://developer.api.autodesk.com/da/us-east/v3/appbundles/{0}/aliases",
+
+            UPDATE_APPBUNDLE_ALIAS_URL:  "https://developer.api.autodesk.com/da/us-east/v3/appbundles/{0}/aliases/{1}",
+            CREATE_ACTIVITY_ALIAS: "https://developer.api.autodesk.com/da/us-east/v3/activities/{0}/aliases",
+        }
     }
 };
