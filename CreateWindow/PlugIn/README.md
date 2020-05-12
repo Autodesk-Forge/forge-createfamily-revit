@@ -29,38 +29,16 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
 - In **DoubleHungWinCreation.cs**, use Application to replace UIApplication, and update the all the referenced place.
 
 ## Let's make it work as AppBundle of Design Automation for Revit
-- Add reference to DesignAutomationBridge.dll(please download at [Nuget](https://www.nuget.org/packages/Autodesk.Forge.DesignAutomation)), remove the command class, create the new class **CreateWindowApp** from **IExternalDBApplication**, also add a helper class **RuntimeValue** to switch between local and cloud, the code should look like: 
+- Add reference to DesignAutomationBridge.dll(please download at [Nuget](https://www.nuget.org/packages/Autodesk.Forge.DesignAutomation)), remove the command class, create the new class **CreateWindowApp** from **IExternalDBApplication**, the code should look like: 
 ```   
-    internal class RuntimeValue
-    {
-        // Change this to true when publishing to Revit IO cloud
-        public static bool RunOnCloud { get; } = true;
-    }
-
     [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
     public class CreateWindowApp : IExternalDBApplication
     {
         public ExternalDBApplicationResult OnStartup(ControlledApplication application)
         {
-            if (RuntimeValue.RunOnCloud)
-            {
-                DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
-            }
-            else
-            {
-                // For local test
-                application.ApplicationInitialized += HandleApplicationInitializedEvent;
-            }
-
+            DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
             return ExternalDBApplicationResult.Succeeded;
-        }
-
-        public void HandleApplicationInitializedEvent(object sender, Autodesk.Revit.DB.Events.ApplicationInitializedEventArgs e)
-        {
-            Autodesk.Revit.ApplicationServices.Application app = sender as Autodesk.Revit.ApplicationServices.Application;
-            DesignAutomationData data = new DesignAutomationData(app, "C:\\Program Files\\Autodesk\\Revit 2019\\Samples\\WindowFamilyTmp.rft");
-            CreateWindowFamily(data);
         }
 
         public void HandleDesignAutomationReadyEvent( object sender, DesignAutomationReadyEventArgs e)
@@ -169,20 +147,13 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
         }
 ```
 
-- Update the method **WindowWizard.RunWizard()** as follow to use the different way for parameter collection:
+- Update the method **WindowWizard.RunWizard()** as follow for parameter collection:
 ```
         public bool RunWizard()
         {
             // For Window Family Creation workItem
             WindowsDAParams windowFamilyParams;
-            if (RuntimeValue.RunOnCloud)
-            {
-                windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
-            }
-            else
-            {
-                windowFamilyParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
-            }
+            windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
 
             m_para = new WizardParameter();
             m_para.m_template = windowFamilyParams.WindowStyle;
@@ -215,16 +186,9 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
         }
 ```
 
-- Use different approaches to save the new created RFA file, add the following code to the constructor of class **DoubleHungWinCreation**:
+- set the window family name as follow to the constructor of class **DoubleHungWinCreation**:
 ```
-        if (RuntimeValue.RunOnCloud)
-        {
             para.PathName = "WindowFamily.rfa";
-        }
-        else
-        {
-            para.PathName = "C:\\Users\\zhongwu\\Documents\\DoubleHungWin.rfa";
-        }
 ```
 
 - To make the new created family file could be previewed, modify the code to create the thumbnail for the family as follow:       
@@ -444,14 +408,7 @@ Here is the main steps to migrate the Revit addin, before read the detail steps,
         {
             // For Window Family Creation workItem
             WindowsDAParams windowFamilyParams;
-            if ( RuntimeValue.RunOnCloud)
-            {
-                windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
-            }
-            else
-            {
-                windowFamilyParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
-            }
+            windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
 
             m_para = new WizardParameter();
             m_para.m_template = windowFamilyParams.WindowStyle;

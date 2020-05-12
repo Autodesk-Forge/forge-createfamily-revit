@@ -123,6 +123,9 @@ Desktop APIs:
 - The Window family template which is used to create the family should be uploaded first.
 - Before using the sample to call the workitem, you need to setup your Appbundle & Activity of Design Automation, you can follow my Postman script to understand the whole process, or you can simply use the `Configure` button in the Web Application to create the Appbundle & Activity([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)). 
 
+## Limitation
+- Not support multiple version of the new created family, need to create or select a new folder for the same name of Revit family file.
+
 ## Troubleshooting
 
 After installing Github desktop for Windows, on the Git Shell, if you see a ***error setting certificate verify locations*** error, use the following:
