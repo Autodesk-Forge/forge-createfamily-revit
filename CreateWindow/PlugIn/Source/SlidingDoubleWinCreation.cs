@@ -178,15 +178,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
                         para.Validator.IsMetric = false;
                         break;
                 }
-                if (RuntimeValue.RunOnCloud)
-                {
-                    para.PathName = "WindowFamily.rfa";
-                }
-                else
-                {
-                    para.PathName = "C:\\Users\\zhongwu\\Documents\\SlidingDoubleWin.rfa";
-                }
-
+                para.PathName = "WindowFamily.rfa";
                 CreateCommon();
 
                 tran.Commit();

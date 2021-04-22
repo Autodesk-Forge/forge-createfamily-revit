@@ -62,14 +62,7 @@ namespace Autodesk.Forge.RevitIO.CreateWindow
         {
             // For Window Family Creation workItem
             WindowsDAParams windowFamilyParams;
-            if ( RuntimeValue.RunOnCloud)
-            {
-                windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
-            }
-            else
-            {
-                windowFamilyParams = WindowsDAParams.Parse("C:\\Users\\zhongwu\\Documents\\WindowParams.json");
-            }
+            windowFamilyParams = WindowsDAParams.Parse("WindowParams.json");
 
             m_para = new WizardParameter();
             m_para.m_template = windowFamilyParams.WindowStyle;

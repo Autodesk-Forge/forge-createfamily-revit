@@ -56,10 +56,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DesignAutomationBridge">
-      <HintPath>C:\Program Files\Autodesk\Revit 2019\DesignAutomationBridge.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="DesignAutomationBridge, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Autodesk.Forge.DesignAutomation.Revit.2019.0.0\lib\net47\DesignAutomationBridge.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>

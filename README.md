@@ -1,4 +1,4 @@
-# design.automation-nodejs-revit.window.family.create
+# Create Revit Families (Windows) with Design Automation
 
 [![Node.js](https://img.shields.io/badge/Node.js-8.0-blue.svg)](https://nodejs.org/)
 [![npm](https://img.shields.io/badge/npm-4.0-blue.svg)](https://www.npmjs.com/)
@@ -21,7 +21,7 @@
 This sample demostrated how to create a window family using Design Automation for Revit API **V3**.
 
 # Thumbnail
-![thumbnail](/public/res/screenshot.png)
+![thumbnail](/thumbnail.png)
 
 # Live Demo
 [https://familycreationsample.herokuapp.com/](https://familycreationsample.herokuapp.com/)
@@ -122,6 +122,9 @@ Desktop APIs:
 ## Tips & Tricks
 - The Window family template which is used to create the family should be uploaded first.
 - Before using the sample to call the workitem, you need to setup your Appbundle & Activity of Design Automation, you can follow my Postman script to understand the whole process, or you can simply use the `Configure` button in the Web Application to create the Appbundle & Activity([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)). 
+
+## Limitation
+- Not support multiple version of the new created family, need to create or select a new folder for the same name of Revit family file.
 
 ## Troubleshooting
 
