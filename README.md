@@ -124,7 +124,8 @@ Desktop APIs:
 - Before using the sample to call the workitem, you need to setup your Appbundle & Activity of Design Automation, you can follow my Postman script to understand the whole process, or you can simply use the `Configure` button in the Web Application to create the Appbundle & Activity([https://youtu.be/1NCeH7acIko](https://youtu.be/1NCeH7acIko)). 
 
 ## Limitation
-- Not support multiple version of the new created family, need to create or select a new folder for the same name of Revit family file.
+- Not support multiple version of the new created family, change the family name is it's already existed under the folder, or create|select a new folder for the same name of Revit family file.
+- Only US region is supported, EU region is not supported currently.
 
 ## Troubleshooting
 
