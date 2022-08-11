@@ -225,39 +225,38 @@ async function getNewCreatedStorageInfo(projectId, folderId, fileName, oauth_cli
 
 
 function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, createVersionData, access_token_3Legged, access_token_2Legged) {
-
     return new Promise(function (resolve, reject) {
-
         const workitemBody = {
-
-                activityId: designAutomation.nickname + '.'+designAutomation.activity_name,
-                arguments: {
-                    templateFile: {
-                        url: inputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token_2Legged.access_token
-                        },
+            activityId: designAutomation.nickname + '.' + designAutomation.activity_name,
+            arguments: {
+                templateFile: {
+                    url: inputUrl,
+                    Headers: {
+                        Authorization: 'Bearer ' + access_token_2Legged.access_token
                     },
-                    windowParams: { 
-                        url: "data:application/json,"+ JSON.stringify(windowParams)
-                     },
-
-                    resultFamily: {
-                        verb: 'put',
-                        url: outputUrl,
-                        Headers: {
-                            Authorization: 'Bearer ' + access_token_3Legged.access_token
-                        },
+                },
+                windowParams: {
+                    url: "data:application/json," + JSON.stringify(windowParams)
+                },
+                resultFamily: {
+                    verb: 'put',
+                    url: outputUrl,
+                    Headers: {
+                        Authorization: 'Bearer ' + access_token_3Legged.access_token
                     },
-                    onComplete: {
-                        verb: "post",
-                        url: designAutomation.webhook_url
-                    }
+                },
+                onComplete: {
+                    verb: "post",
+                    url: designAutomation.webhook_url
+                },
+                adskDebug: {
+                    uploadJobFolder: true
                 }
-        };    
+            }
+        };
         var options = {
             method: 'POST',
-            url: designAutomation.endpoint+'workitems',
+            url: designAutomation.endpoint + 'workitems',
             headers: {
                 Authorization: 'Bearer ' + access_token_2Legged.access_token,
                 'Content-Type': 'application/json'

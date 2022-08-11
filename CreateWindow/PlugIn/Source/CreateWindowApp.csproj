@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Autodesk.Forge.RevitIO.CreateWindow</RootNamespace>
     <AssemblyName>CreateWindowApp</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -57,17 +57,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DesignAutomationBridge, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Autodesk.Forge.DesignAutomation.Revit.2019.0.0\lib\net47\DesignAutomationBridge.dll</HintPath>
+      <HintPath>packages\Autodesk.Forge.DesignAutomation.Revit.2022.0.0\lib\net48\DesignAutomationBridge.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="RevitAPI">
-      <HintPath>C:\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+      <HintPath>C:\Program Files\Autodesk\Revit 2022\RevitAPI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -128,9 +126,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-xcopy /Y /F "$(ProjectDir)CreateWindowApp.bundle\Contents\CreateWindowApp.addin" "$(AppData)\Autodesk\REVIT\Addins\2019"
 
-xcopy /Y /F "$(ProjectDir)bin\Debug\CreateWindowApp.dll" "$(AppData)\Autodesk\REVIT\Addins\2019”
+xcopy /Y /F "$(ProjectDir)\bin\Debug\*.dll" "$(AppData)\Autodesk\REVIT\Addins\2022"
+xcopy /Y /F "$(ProjectDir)\CreateWindowApp.bundle\Contents\CreateWindowApp.addin" "$(AppData)\Autodesk\REVIT\Addins\2022"
+
 
 xcopy /Y /F "$(TargetDir)*.dll" "$(ProjectDir)CreateWindowApp.bundle\Contents\"
 
