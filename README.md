@@ -1,15 +1,14 @@
 # Create Revit Families (Windows) with Design Automation
 
-[![Node.js](https://img.shields.io/badge/Node.js-8.0-blue.svg)](https://nodejs.org/)
-[![npm](https://img.shields.io/badge/npm-4.0-blue.svg)](https://www.npmjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js->=10.0.0-blue.svg)](https://nodejs.org/)
 ![Platforms](https://img.shields.io/badge/Web-Windows%20%7C%20MacOS%20%7C%20Linux-lightgray.svg)
 [![Data-Management](https://img.shields.io/badge/Data%20Management-v1-green.svg)](http://developer.autodesk.com/)
 [![Design-Automation](https://img.shields.io/badge/Design%20Automation-v3-green.svg)](http://developer.autodesk.com/)
 
 
 ![Windows](https://img.shields.io/badge/Plugins-Windows-lightgrey.svg)
-![.NET](https://img.shields.io/badge/.NET%20Framework-4.7-blue.svg)
-[![Revit-2019](https://img.shields.io/badge/Revit-2019-lightgrey.svg)](http://autodesk.com/revit)
+![.NET](https://img.shields.io/badge/.NET%20Framework-4.8-blue.svg)
+[![Revit-2022](https://img.shields.io/badge/Revit-2022-lightgrey.svg)](http://autodesk.com/revit)
 
 
 ![Advanced](https://img.shields.io/badge/Level-Advanced-red.svg)
