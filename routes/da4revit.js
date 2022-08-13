@@ -20,7 +20,8 @@ const express = require('express');
 
 const {
     ItemsApi,
-    VersionsApi
+    VersionsApi,
+    ObjectsApi
 } = require('forge-apis');
 
 const {
@@ -100,6 +101,7 @@ router.post('/da4revit/v1/families', async(req, res)=>{
             return;
         }
         const outputUrl = storageInfo.StorageUrl;
+        const signedS3Info = storageInfo.SignedS3Info;
 
         const bim360_Item_Type = 'items:autodesk.bim360:File';
         const bim360_Version_Type = 'versions:autodesk.bim360:File';
@@ -123,7 +125,7 @@ router.post('/da4revit/v1/families', async(req, res)=>{
                     res.status(400).end('The inpute Window Types is not correct');
                     return;
                 }
-                familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params.WindowParams, outputUrl, destinateProjectId, createFirstVersionBody, req.oauth_token, oauth_token);
+                familyCreatedRes = await createWindowFamily(designAutomation.revit_family_template, params.WindowParams, outputUrl, destinateProjectId, signedS3Info, createFirstVersionBody, req.oauth_token, oauth_token);
                 break;
 
             case FamilyType.DOOR:
@@ -228,6 +230,11 @@ router.post('/callback/designautomation', async (req, res) => {
         console.log("Post handle the workitem:  " + workitem.workitemId);        
         const type = workitem.createVersionData.data.type;
         try {
+
+            // Call to complete the S3 upload.
+            const objectApi = new ObjectsApi();
+            objectApi.completeS3Upload(workitem.signedS3Info.BucketKey, workitem.signedS3Info.ObjectKey, { uploadKey: workitem.signedS3Info.UploadKey }, null, req.oauth_client,workitem.access_token_3Legged)
+
             let version = null;
             if(type === "versions"){
                 const versions = new VersionsApi();

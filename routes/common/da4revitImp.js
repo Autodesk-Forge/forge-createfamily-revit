@@ -21,6 +21,7 @@ const request = require("request");
 const { designAutomation }= require('../../config');
 
 const {
+    ObjectsApi,
     ProjectsApi, 
     StorageRelationshipsTarget,
     CreateStorageDataRelationships,
@@ -215,16 +216,33 @@ async function getNewCreatedStorageInfo(projectId, folderId, fileName, oauth_cli
         console.log('storage id is not correct');
         return null;
     }
-    const storageUrl = "https://developer.api.autodesk.com/oss/v2/buckets/" + AUTODESK_HUB_BUCKET_KEY + "/objects/" + strList[1];
+    // const storageUrl = "https://developer.api.autodesk.com/oss/v2/buckets/" + AUTODESK_HUB_BUCKET_KEY + "/objects/" + strList[1];
+
+    // create signed s3 url
+    let response = null;
+    try{
+        const object = new ObjectsApi();
+        response = await object.getS3UploadURL(AUTODESK_HUB_BUCKET_KEY,strList[1], null, oauth_client, oauth_token);
+    }catch( err ){
+        console.log('failed to get signed S3 url.');
+        return null;
+    }
+
     return {
         "StorageId": storage.body.data.id,
-        "StorageUrl": storageUrl
+        // "StorageUrl": storageUrl
+        "StorageUrl": response.body.urls[0],
+        "SignedS3Info": {
+            BucketKey: AUTODESK_HUB_BUCKET_KEY,
+            ObjectKey: strList[1],
+            UploadKey: response.body.uploadKey
+        }
     };
 }
 
 
 
-function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, createVersionData, access_token_3Legged, access_token_2Legged) {
+function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, signedS3Info, createVersionData, access_token_3Legged, access_token_2Legged) {
     return new Promise(function (resolve, reject) {
         const workitemBody = {
             activityId: designAutomation.nickname + '.' + designAutomation.activity_name,
@@ -240,18 +258,15 @@ function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, create
                 },
                 resultFamily: {
                     verb: 'put',
-                    url: outputUrl,
-                    Headers: {
-                        Authorization: 'Bearer ' + access_token_3Legged.access_token
-                    },
+                    url: outputUrl
                 },
                 onComplete: {
                     verb: "post",
                     url: designAutomation.webhook_url
-                },
-                adskDebug: {
-                    uploadJobFolder: true
-                }
+                }//,
+                // adskDebug: {
+                //     uploadJobFolder: true
+                // }
             }
         };
         var options = {
@@ -278,6 +293,7 @@ function createWindowFamily(inputUrl, windowParams, outputUrl, projectId, create
                 workitemList.push({
                     workitemId: resp.id,
                     projectId: projectId,
+                    signedS3Info: signedS3Info,
                     createVersionData: createVersionData,
                     access_token_3Legged: access_token_3Legged
                 })
